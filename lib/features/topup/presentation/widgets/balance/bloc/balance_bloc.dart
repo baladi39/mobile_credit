@@ -7,7 +7,7 @@ part 'balance_event.dart';
 part 'balance_state.dart';
 
 class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
-  final LatestFinancialSummary currentFinancialSummary;
+  final LatestFinancialSummary latestFinancialSummary;
 
   /// This Bloc is used to mimic a database for user financial data in this example.
   /// In a real application, a proper database solution would be implemented.
@@ -17,11 +17,11 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
   );
 
   BalanceBloc({
-    required this.currentFinancialSummary,
+    required this.latestFinancialSummary,
   }) : super(BalanceInitial()) {
     on<BalanceEvent>((event, emit) => emit(BalanceLoading()));
     on<GetBalanceEvent>((event, emit) async {
-      var response = await currentFinancialSummary(event.userId);
+      var response = await latestFinancialSummary(event.userId);
 
       return response.fold(
         (l) => emit(BalanceFailer(l.message)),
@@ -30,7 +30,7 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
             totalBalance: r.totalBalance,
             totalMonthlySpent: r.totalMonthlySpent,
           );
-          emit(BalanceSuccess(r.totalBalance, r.totalMonthlySpent));
+          return emit(BalanceSuccess(r));
         },
       );
     });

@@ -5,6 +5,7 @@ final serviceLocator = GetIt.instance;
 Future<void> locatorServices() async {
   _initAuth();
   _initFinancial();
+  _initBeneficiary();
 
   // core
   serviceLocator.registerLazySingleton(
@@ -56,11 +57,25 @@ void _initFinancial() {
       () => LatestFinancialSummary(
         serviceLocator(),
       ),
+    );
+}
+
+void _initBeneficiary() {
+  // Datasource
+  serviceLocator
+    ..registerFactory<BeneficiaryRemoteDataSource>(
+      () => BeneficiaryRemoteDataSourceImpl(),
     )
-    // Bloc
-    ..registerLazySingleton(
-      () => BalanceBloc(
-        currentFinancialSummary: serviceLocator(),
+    // Repository
+    ..registerFactory<BeneficiaryRepository>(
+      () => BeneficiaryRepositoryImpl(
+        serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory(
+      () => LatestBeneficiaries(
+        serviceLocator(),
       ),
     );
 }

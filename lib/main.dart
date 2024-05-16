@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
 import 'package:mobile_credit/locator_services.dart';
 
 import 'core/common/cubits/app_user/app_user_cubit.dart';
@@ -34,8 +33,5 @@ var multiBlocProvider = MultiBlocProvider(providers: [
   ),
   BlocProvider(
     create: (_) => serviceLocator<AuthBloc>(),
-  ),
-  BlocProvider(
-    create: (_) => serviceLocator<BalanceBloc>(),
   ),
 ], child: const MyApp());

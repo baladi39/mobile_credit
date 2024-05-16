@@ -34,11 +34,12 @@ class _BalanceState extends State<Balance> {
                 children: [
                   balanceTotals(
                     'Balance:',
-                    state.totalBalance.amountToString(),
+                    state.userFinancialSummary.totalBalance.amountToString(),
                   ),
                   balanceTotals(
-                    'Spent:',
-                    state.totalMonthlySpent.amountToString(),
+                    'Mth. Spent:',
+                    state.userFinancialSummary.totalMonthlySpent
+                        .amountToString(),
                   ),
                 ],
               );

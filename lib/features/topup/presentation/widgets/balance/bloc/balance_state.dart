@@ -12,9 +12,9 @@ final class BalanceInitial extends BalanceState {}
 final class BalanceLoading extends BalanceState {}
 
 final class BalanceSuccess extends BalanceState {
-  final double totalBalance;
-  final double totalMonthlySpent;
-  const BalanceSuccess(this.totalBalance, this.totalMonthlySpent);
+  final UserFinancialSummary userFinancialSummary;
+
+  const BalanceSuccess(this.userFinancialSummary);
 }
 
 final class BalanceFailer extends BalanceState {

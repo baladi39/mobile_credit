@@ -24,7 +24,12 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
               amount: 0),
           Beneficiary(
               beneficiaryId: 200,
-              nickName: 'Son',
+              nickName: 'Son 1',
+              mobile: '+97158333',
+              amount: 100),
+          Beneficiary(
+              beneficiaryId: 200,
+              nickName: 'Son 2',
               mobile: '+97158333',
               amount: 100),
         ];
