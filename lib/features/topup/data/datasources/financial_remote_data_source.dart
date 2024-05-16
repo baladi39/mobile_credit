@@ -1,4 +1,5 @@
 import 'package:mobile_credit/core/error/exceptions.dart';
+import 'package:mobile_credit/fake_datebase.dart';
 
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
 
@@ -7,7 +8,11 @@ abstract interface class FinancialRemoteDataSource {
 }
 
 class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
-  FinancialRemoteDataSourceImpl();
+  FinancialRemoteDataSourceImpl(
+    this.fakeDatebase,
+  );
+
+  final FakeDatebase fakeDatebase;
 
   @override
   Future<UserFinancialSummary> getCurrentFinancialData(int userId) async {
@@ -17,15 +22,9 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
     try {
       // Pretend we are recieving json
       if (userId == 1) {
-        return UserFinancialSummary(
-          totalBalance: 4000.20,
-          totalMonthlySpent: 100,
-        );
+        return fakeDatebase.userOneFinancialSummary;
       } else {
-        return UserFinancialSummary(
-          totalBalance: 5201.05,
-          totalMonthlySpent: 1000,
-        );
+        return fakeDatebase.userTwoFinancialSummary;
       }
     } catch (e) {
       throw ServerException(e.toString());

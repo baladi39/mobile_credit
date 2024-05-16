@@ -28,13 +28,22 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+      padding: const EdgeInsets.only(top: 40, bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'List of Benificiary',
-            style: Theme.of(context).textTheme.headlineSmall,
+          Row(
+            children: [
+              Text(
+                'List of Benificiary',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const Spacer(),
+              ElevatedButton(
+                child: const Icon(Icons.add),
+                onPressed: () {},
+              )
+            ],
           ),
           const SizedBox(height: 24),
           SizedBox(

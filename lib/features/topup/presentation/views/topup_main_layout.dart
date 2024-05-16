@@ -46,6 +46,7 @@ class TopupMainLayout extends StatelessWidget {
     );
   }
 
+  // Make AppBar a reusable widget in the future
   AppBar appBar(BuildContext context) {
     return AppBar(
       actions: [

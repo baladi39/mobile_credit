@@ -1,4 +1,5 @@
 import 'package:mobile_credit/core/error/exceptions.dart';
+import 'package:mobile_credit/fake_datebase.dart';
 import 'package:mobile_credit/features/topup/domain/entities/beneficiary.dart';
 
 abstract interface class BeneficiaryRemoteDataSource {
@@ -6,7 +7,10 @@ abstract interface class BeneficiaryRemoteDataSource {
 }
 
 class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
-  BeneficiaryRemoteDataSourceImpl();
+  final FakeDatebase fakeDatebase;
+  BeneficiaryRemoteDataSourceImpl(
+    this.fakeDatebase,
+  );
 
   @override
   Future<List<Beneficiary>> getBenficiaryData(int userId) async {
@@ -16,31 +20,9 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
     try {
       // Pretend we are recieving json
       if (userId == 1) {
-        return [
-          Beneficiary(
-              beneficiaryId: 100,
-              nickName: 'Daughter',
-              mobile: '+97158222',
-              amount: 0),
-          Beneficiary(
-              beneficiaryId: 200,
-              nickName: 'Son 1',
-              mobile: '+97158333',
-              amount: 100),
-          Beneficiary(
-              beneficiaryId: 200,
-              nickName: 'Son 2',
-              mobile: '+97158333',
-              amount: 100),
-        ];
+        return fakeDatebase.userOneBeneficiaries;
       } else {
-        return [
-          Beneficiary(
-              beneficiaryId: 200,
-              nickName: 'Son',
-              mobile: '+97158555',
-              amount: 20),
-        ];
+        return fakeDatebase.userTwoBeneficiaries;
       }
     } catch (e) {
       throw ServerException(e.toString());

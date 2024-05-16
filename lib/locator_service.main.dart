@@ -3,14 +3,19 @@ part of 'locator_services.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> locatorServices() async {
-  _initAuth();
-  _initFinancial();
-  _initBeneficiary();
-
   // core
   serviceLocator.registerLazySingleton(
     () => AppUserCubit(),
   );
+
+  // Very very fake database
+  serviceLocator.registerLazySingleton(
+    () => FakeDatebase(),
+  );
+
+  _initAuth();
+  _initFinancial();
+  _initBeneficiary();
 }
 
 void _initAuth() {
@@ -44,7 +49,9 @@ void _initFinancial() {
   // Datasource
   serviceLocator
     ..registerFactory<FinancialRemoteDataSource>(
-      () => FinancialRemoteDataSourceImpl(),
+      () => FinancialRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
     )
     // Repository
     ..registerFactory<FinancialRepository>(
@@ -64,7 +71,9 @@ void _initBeneficiary() {
   // Datasource
   serviceLocator
     ..registerFactory<BeneficiaryRemoteDataSource>(
-      () => BeneficiaryRemoteDataSourceImpl(),
+      () => BeneficiaryRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
     )
     // Repository
     ..registerFactory<BeneficiaryRepository>(
