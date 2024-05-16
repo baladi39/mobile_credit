@@ -4,6 +4,7 @@ final serviceLocator = GetIt.instance;
 
 Future<void> locatorServices() async {
   _initAuth();
+  _initFinancial();
 
   // core
   serviceLocator.registerLazySingleton(
@@ -38,43 +39,28 @@ void _initAuth() {
     );
 }
 
-// void _initBlog() {
-//   // Datasource
-//   serviceLocator
-//     ..registerFactory<BlogRemoteDataSource>(
-//       () => BlogRemoteDataSourceImpl(
-//         serviceLocator(),
-//       ),
-//     )
-//     ..registerFactory<BlogLocalDataSource>(
-//       () => BlogLocalDataSourceImpl(
-//         serviceLocator(),
-//       ),
-//     )
-//     // Repository
-//     ..registerFactory<BlogRepository>(
-//       () => BlogRepositoryImpl(
-//         serviceLocator(),
-//         serviceLocator(),
-//         serviceLocator(),
-//       ),
-//     )
-//     // Usecases
-//     ..registerFactory(
-//       () => UploadBlog(
-//         serviceLocator(),
-//       ),
-//     )
-//     ..registerFactory(
-//       () => GetAllBlogs(
-//         serviceLocator(),
-//       ),
-//     )
-//     // Bloc
-//     ..registerLazySingleton(
-//       () => BlogBloc(
-//         uploadBlog: serviceLocator(),
-//         getAllBlogs: serviceLocator(),
-//       ),
-//     );
-// }
+void _initFinancial() {
+  // Datasource
+  serviceLocator
+    ..registerFactory<FinancialRemoteDataSource>(
+      () => FinancialRemoteDataSourceImpl(),
+    )
+    // Repository
+    ..registerFactory<FinancialRepository>(
+      () => FinancialRepositoryImpl(
+        serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory(
+      () => CurrentFinancialSummary(
+        serviceLocator(),
+      ),
+    )
+    // Bloc
+    ..registerLazySingleton(
+      () => BalanceBloc(
+        currentFinancialSummary: serviceLocator(),
+      ),
+    );
+}

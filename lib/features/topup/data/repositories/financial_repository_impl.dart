@@ -1,5 +1,4 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:mobile_credit/core/common/entities/user.dart';
 import 'package:mobile_credit/core/error/exceptions.dart';
 import 'package:mobile_credit/features/topup/data/datasources/financial_remote_data_source.dart';
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';

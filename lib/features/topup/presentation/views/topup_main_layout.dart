@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_credit/features/auth/presentation/views/login_view.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/benificiary_list.dart';
-import 'package:mobile_credit/features/topup/presentation/widgets/total_balance.dart';
+import 'package:mobile_credit/features/topup/presentation/widgets/balance/balance.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/user_header.dart';
 
 class TopupMainLayout extends StatefulWidget {
@@ -25,7 +25,7 @@ class _TopupMainLayoutState extends State<TopupMainLayout> {
             // User Header
             UserHeader(),
             // Total Balance
-            TotalBalance(),
+            Balance(),
             // Benifeciary List
             BenificiaryList(),
           ],

@@ -11,6 +11,9 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
 
   @override
   Future<UserFinancialSummary> getCurrentFinancialData(int userId) async {
+    // Simmulating api call delay
+    await Future.delayed(const Duration(seconds: 1));
+
     try {
       // Pretend we are recieving json
       if (userId == 1) {
