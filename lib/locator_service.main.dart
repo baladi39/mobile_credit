@@ -53,7 +53,7 @@ void _initFinancial() {
     )
     // Usecases
     ..registerFactory(
-      () => CurrentFinancialSummary(
+      () => LatestFinancialSummary(
         serviceLocator(),
       ),
     )

@@ -4,16 +4,11 @@ import 'package:mobile_credit/features/topup/presentation/widgets/benificiary_li
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/balance.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/user_header.dart';
 
-class TopupMainLayout extends StatefulWidget {
+class TopupMainLayout extends StatelessWidget {
   const TopupMainLayout({super.key});
   static route() => MaterialPageRoute(
         builder: (context) => const TopupMainLayout(),
       );
-  @override
-  State<TopupMainLayout> createState() => _TopupMainLayoutState();
-}
-
-class _TopupMainLayoutState extends State<TopupMainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +19,7 @@ class _TopupMainLayoutState extends State<TopupMainLayout> {
           children: [
             // User Header
             UserHeader(),
-            // Total Balance
+            // Balance
             Balance(),
             // Benifeciary List
             BenificiaryList(),

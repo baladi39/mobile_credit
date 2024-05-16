@@ -44,8 +44,12 @@ class _BalanceState extends State<Balance> {
               );
             }
             if (state is BalanceFailer) {
-              return generalText(
-                state.meesage.toString(),
+              return Row(
+                children: [
+                  generalText(
+                    state.meesage.toString(),
+                  ),
+                ],
               );
             }
             return const Loader();
