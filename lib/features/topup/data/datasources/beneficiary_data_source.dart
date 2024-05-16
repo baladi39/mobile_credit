@@ -4,6 +4,8 @@ import 'package:mobile_credit/features/topup/domain/entities/beneficiary.dart';
 
 abstract interface class BeneficiaryRemoteDataSource {
   Future<List<Beneficiary>> getBenficiaryData(int userId);
+  Future<List<Beneficiary>> addBenficiaryData(
+      int userId, Beneficiary beneficiary);
 }
 
 class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
@@ -26,6 +28,21 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
       }
     } catch (e) {
       throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<Beneficiary>> addBenficiaryData(
+      int userId, Beneficiary beneficiary) async {
+    // Simmulating api call delay
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (userId == 1) {
+      fakeDatebase.userOneBeneficiaries.add(beneficiary);
+      return fakeDatebase.userOneBeneficiaries;
+    } else {
+      fakeDatebase.userTwoBeneficiaries.add(beneficiary);
+      return fakeDatebase.userTwoBeneficiaries;
     }
   }
 }

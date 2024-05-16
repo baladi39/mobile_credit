@@ -11,3 +11,8 @@ final class GetBeneficiariesEvent extends BeneficiaryEvent {
   final int userId;
   const GetBeneficiariesEvent(this.userId);
 }
+
+final class AddBeneficiariesEvent extends BeneficiaryEvent {
+  final AddBeneficiaryParam addBeneficiaryParam;
+  const AddBeneficiariesEvent(this.addBeneficiaryParam);
+}

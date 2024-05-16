@@ -86,5 +86,10 @@ void _initBeneficiary() {
       () => LatestBeneficiaries(
         serviceLocator(),
       ),
+    )
+    ..registerFactory(
+      () => AddBeneficiary(
+        serviceLocator(),
+      ),
     );
 }

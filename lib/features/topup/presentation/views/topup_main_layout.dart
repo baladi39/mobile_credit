@@ -22,6 +22,7 @@ class TopupMainLayout extends StatelessWidget {
           BlocProvider(
             create: (context) => BeneficiaryBloc(
               latestBeneficiaries: serviceLocator(),
+              addBeneficiary: serviceLocator(),
             ),
           ),
           BlocProvider(
