@@ -8,28 +8,27 @@ class UserModel extends User {
     required super.isVerifed,
   });
 
-  /// Not needed since we are not receiving any json.
-  ///
-  // factory UserModel.fromJson(Map<String, dynamic> map) {
-  //   return UserModel(
-  //     id: map['id'] ?? '',
-  //     email: map['email'] ?? '',
-  //     name: map['name'] ?? '',
-  //     isVerifed: map['is_verifed'] ?? '',
-  //   );
-  // }
+  // Methods for converting to and from JSON format, currently not used due to mocked responses.
+  factory UserModel.fromJson(Map<String, dynamic> map) {
+    return UserModel(
+      id: map['id'] ?? '',
+      email: map['email'] ?? '',
+      name: map['name'] ?? '',
+      isVerifed: map['is_verifed'] ?? '',
+    );
+  }
 
-  // UserModel copyWith({
-  //   int? id,
-  //   String? email,
-  //   String? name,
-  //   bool? isVerifed,
-  // }) {
-  //   return UserModel(
-  //     id: id ?? this.id,
-  //     email: email ?? this.email,
-  //     name: name ?? this.name,
-  //     isVerifed: isVerifed ?? this.isVerifed,
-  //   );
-  // }
+  UserModel copyWith({
+    int? id,
+    String? email,
+    String? name,
+    bool? isVerifed,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      isVerifed: isVerifed ?? this.isVerifed,
+    );
+  }
 }
