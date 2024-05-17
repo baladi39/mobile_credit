@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
+import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
+import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/add_beneficiary_dialog.dart';
+import 'package:mobile_credit/features/topup/presentation/widgets/recharge/recharge_dialog.dart';
 
 import 'beneficiary_card.dart';
 import 'bloc/beneficiary_bloc.dart';
@@ -41,7 +44,17 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
               const Spacer(),
               ElevatedButton(
                 child: const Icon(Icons.add),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      barrierColor: Colors.transparent,
+                      context: context,
+                      builder: (_) {
+                        return BlocProvider.value(
+                          value: context.read<BeneficiaryBloc>(),
+                          child: const AddBeneficiaryDialog(),
+                        );
+                      });
+                },
               )
             ],
           ),
@@ -59,7 +72,17 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
                           return BeneficiaryCard(
                             nickName: beneficiary.nickName,
                             phoneNumber: beneficiary.mobile,
-                            callToAction: () {},
+                            callToAction: () {
+                              showDialog(
+                                  barrierColor: Colors.transparent,
+                                  context: context,
+                                  builder: (_) {
+                                    return BlocProvider.value(
+                                      value: context.read<BalanceBloc>(),
+                                      child: const RechargeDialog(),
+                                    );
+                                  });
+                            },
                           );
                         });
                   }

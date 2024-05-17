@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
 import 'package:mobile_credit/core/utils/show_snackbar.dart';
 import 'package:mobile_credit/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mobile_credit/features/topup/presentation/views/topup_main_layout.dart';
+import 'package:mobile_credit/features/topup/presentation/views/topup_view.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -25,7 +25,7 @@ class LoginView extends StatelessWidget {
             } else if (state is AuthSuccess) {
               Navigator.pushAndRemoveUntil(
                 context,
-                TopupMainLayout.route(),
+                TopupView.route(),
                 (route) => false,
               );
             }

@@ -12,7 +12,7 @@ final class GetBalanceEvent extends BalanceEvent {
   const GetBalanceEvent(this.userId);
 }
 
-// final class UpdateBalanceEvent extends BalanceEvent {
-//   final int userId;
-//   const UpdateBalanceEvent(this.userId);
-// }
+final class SpendUserCreditEvent extends BalanceEvent {
+  final UserSpendCreditParam userSpendCreditParam;
+  const SpendUserCreditEvent(this.userSpendCreditParam);
+}

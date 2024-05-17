@@ -8,11 +8,12 @@ import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/bl
 import 'package:mobile_credit/features/topup/presentation/widgets/user_header.dart';
 import 'package:mobile_credit/locator_services.dart';
 
-class TopupMainLayout extends StatelessWidget {
-  const TopupMainLayout({super.key});
+class TopupView extends StatelessWidget {
+  const TopupView({super.key});
   static route() => MaterialPageRoute(
-        builder: (context) => const TopupMainLayout(),
+        builder: (context) => const TopupView(),
       );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +29,7 @@ class TopupMainLayout extends StatelessWidget {
           BlocProvider(
             create: (context) => BalanceBloc(
               latestFinancialSummary: serviceLocator(),
+              spendUserCredit: serviceLocator(),
             ),
           ),
         ],

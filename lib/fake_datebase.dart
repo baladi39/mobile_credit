@@ -24,7 +24,7 @@ class FakeDatebase {
         mobile: '+97158333',
         amount: 100),
     Beneficiary(
-        beneficiaryId: 200,
+        beneficiaryId: 300,
         nickName: 'Son 2',
         mobile: '+97158333',
         amount: 100),
@@ -32,6 +32,10 @@ class FakeDatebase {
 
   List<Beneficiary> userTwoBeneficiaries = [
     Beneficiary(
-        beneficiaryId: 200, nickName: 'Son', mobile: '+97158555', amount: 20),
+      beneficiaryId: 400,
+      nickName: 'Son',
+      mobile: '+97158555',
+      amount: 20,
+    ),
   ];
 }

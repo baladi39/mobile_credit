@@ -1,6 +1,8 @@
 class Constants {
-  static List<int> topUpOptions = [5, 10, 20, 30, 50, 75, 100];
   static const generalErrorMessage = 'Something went wrong!';
+
+  /// Transaction fees and topupoptions should be fetched dynamically on app launch, not hard-coded here
+  static List<int> topUpOptions = [5, 10, 20, 30, 50, 75, 100];
   static const transactionFee = 1;
 
   /// Needs clarification

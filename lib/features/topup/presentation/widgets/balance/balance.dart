@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_credit/core/common/extensions/double_extensions.dart';
+import 'package:mobile_credit/core/utils/extensions/double_extensions.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
 
 import '../../../../../core/common/cubits/app_user/app_user_cubit.dart';

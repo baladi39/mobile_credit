@@ -64,6 +64,11 @@ void _initFinancial() {
       () => LatestFinancialSummary(
         serviceLocator(),
       ),
+    )
+    ..registerFactory(
+      () => SpendUserCredit(
+        serviceLocator(),
+      ),
     );
 }
 
