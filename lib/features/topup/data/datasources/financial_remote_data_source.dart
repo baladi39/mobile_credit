@@ -1,10 +1,12 @@
 import 'package:mobile_credit/core/error/exceptions.dart';
 import 'package:mobile_credit/fake_datebase.dart';
-import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
+import 'package:mobile_credit/features/topup/data/models/user_financial_summary_model.dart';
 
 abstract interface class FinancialRemoteDataSource {
-  Future<UserFinancialSummary> getCurrentFinancialData(int userId);
-  Future<UserFinancialSummary> postBeneficiaryCreditTransData(
+  Future<UserFinancialSummaryModel> getCurrentFinancialData(int userId);
+  Future<UserFinancialSummaryModel> postUserDebitPendTransData(
+      int userId, int beneficiaryId, double amount);
+  Future<UserFinancialSummaryModel> postUserDebitTransData(
       int userId, int beneficiaryId, double amount);
 }
 
@@ -16,7 +18,7 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
   final FakeDatebase fakeDatebase;
 
   @override
-  Future<UserFinancialSummary> getCurrentFinancialData(int userId) async {
+  Future<UserFinancialSummaryModel> getCurrentFinancialData(int userId) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 1));
 
@@ -33,31 +35,74 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
   }
 
   @override
-  Future<UserFinancialSummary> postBeneficiaryCreditTransData(
+  Future<UserFinancialSummaryModel> postUserDebitPendTransData(
       int userId, int beneficiaryId, double amount) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 2));
 
     try {
-      // Pretend we are recieving json
+      // Pretend we are making api call and recieving json
       if (userId == 1) {
-        return updateUserBalance(fakeDatebase.userOneFinancialSummary, amount);
+        var finalTotalBalance =
+            fakeDatebase.userOneFinancialSummary.totalBalance - amount;
+        // Transaction would be pending
+        var finalMonthlySpent =
+            fakeDatebase.userOneFinancialSummary.totalMonthlySpent;
+
+        return fakeDatebase.userOneFinancialSummary = UserFinancialSummaryModel(
+          totalBalance: finalTotalBalance,
+          totalMonthlySpent: finalMonthlySpent,
+        );
       } else {
-        return updateUserBalance(fakeDatebase.userTwoFinancialSummary, amount);
+        var finalTotalBalance =
+            fakeDatebase.userTwoFinancialSummary.totalBalance - amount;
+        // Transaction would be pending
+        var finalMonthlySpent =
+            fakeDatebase.userTwoFinancialSummary.totalMonthlySpent;
+
+        return fakeDatebase.userTwoFinancialSummary = UserFinancialSummaryModel(
+          totalBalance: finalTotalBalance,
+          totalMonthlySpent: finalMonthlySpent,
+        );
       }
     } catch (e) {
       throw ServerException(e.toString());
     }
   }
 
-  UserFinancialSummary updateUserBalance(
-      UserFinancialSummary userFinancialSummary, double amount) {
-    var finalTotalBalance = userFinancialSummary.totalBalance - amount;
-    var finalMonthlySpent = userFinancialSummary.totalMonthlySpent + amount;
+  @override
+  Future<UserFinancialSummaryModel> postUserDebitTransData(
+      int userId, int beneficiaryId, double amount) async {
+    // Simmulating api call delay
+    await Future.delayed(const Duration(seconds: 8));
 
-    return userFinancialSummary = userFinancialSummary.copyWith(
-      totalBalance: finalTotalBalance,
-      totalMonthlySpent: finalMonthlySpent,
-    );
+    try {
+      // Pretend we are making api call and recieving json
+      if (userId == 1) {
+        // Already debited
+        var finalTotalBalance =
+            fakeDatebase.userOneFinancialSummary.totalBalance;
+        var finalMonthlySpent =
+            fakeDatebase.userOneFinancialSummary.totalMonthlySpent + amount;
+
+        return fakeDatebase.userOneFinancialSummary = UserFinancialSummaryModel(
+          totalBalance: finalTotalBalance,
+          totalMonthlySpent: finalMonthlySpent,
+        );
+      } else {
+        // Already debited
+        var finalTotalBalance =
+            fakeDatebase.userTwoFinancialSummary.totalBalance;
+        var finalMonthlySpent =
+            fakeDatebase.userTwoFinancialSummary.totalMonthlySpent + amount;
+
+        return fakeDatebase.userTwoFinancialSummary = UserFinancialSummaryModel(
+          totalBalance: finalTotalBalance,
+          totalMonthlySpent: finalMonthlySpent,
+        );
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
   }
 }

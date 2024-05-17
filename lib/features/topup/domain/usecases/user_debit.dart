@@ -5,25 +5,27 @@ import 'package:mobile_credit/core/usecase/usecase.dart';
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
 import 'package:mobile_credit/features/topup/domain/repository/financial_repository.dart';
 
-class SpendUserCredit
-    implements UseCase<UserFinancialSummary, UserSpendCreditParam> {
+class UserDebit implements UseCase<UserFinancialSummary, UserTopUpParam> {
   final FinancialRepository financialRepository;
-  SpendUserCredit(this.financialRepository);
+  UserDebit(this.financialRepository);
 
   @override
   Future<Either<Failure, UserFinancialSummary>> call(
-      UserSpendCreditParam userSpendCreditParam) async {
-    return await financialRepository
-        .postBeneficiaryCreditTrans(userSpendCreditParam);
+      UserTopUpParam userTopUpParam) async {
+    return await financialRepository.postUserDebitPendTrans(
+      userTopUpParam.userId,
+      userTopUpParam.beneficiaryId,
+      userTopUpParam.amount,
+    );
   }
 }
 
-class UserSpendCreditParam {
+class UserTopUpParam {
   final int userId;
   final int beneficiaryId;
   final double amount;
 
-  UserSpendCreditParam(
+  UserTopUpParam(
     this.userId,
     this.beneficiaryId,
     this.amount,

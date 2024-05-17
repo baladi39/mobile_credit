@@ -13,8 +13,19 @@ final class BalanceLoading extends BalanceState {}
 
 final class BalanceSuccess extends BalanceState {
   final UserFinancialSummary userFinancialSummary;
-
   const BalanceSuccess(this.userFinancialSummary);
+
+  @override
+  List<Object> get props => [userFinancialSummary];
+}
+
+final class BalancePostingSuccess extends BalanceState {}
+
+final class BalancePostingPending extends BalanceState {}
+
+final class BalancePostingFailer extends BalanceState {
+  final String meesage;
+  const BalancePostingFailer(this.meesage);
 }
 
 final class BalanceFailer extends BalanceState {

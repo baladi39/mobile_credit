@@ -14,7 +14,6 @@ class UserFinancialSummaryModel extends UserFinancialSummary {
     );
   }
 
-  @override
   UserFinancialSummaryModel copyWith({
     double? totalBalance,
     double? totalMonthlySpent,

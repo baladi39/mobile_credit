@@ -1,9 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:mobile_credit/core/error/exceptions.dart';
-import 'package:mobile_credit/features/topup/data/datasources/beneficiary_data_source.dart';
+import 'package:mobile_credit/features/topup/data/datasources/beneficiary_remote_data_source.dart';
 import 'package:mobile_credit/features/topup/domain/entities/beneficiary.dart';
 import 'package:mobile_credit/features/topup/domain/repository/beneficiary_repository.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/add_beneficiary.dart';
 
 import '../../../../core/error/failures.dart';
 
@@ -28,10 +27,10 @@ class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
 
   @override
   Future<Either<Failure, List<Beneficiary>>> addBeneficiaries(
-      AddBeneficiaryParam addBeneficiaryParam) async {
+      int userId, String nickName) async {
     try {
-      final beneficiaries = await remoteDataSource.addBenficiaryData(
-          addBeneficiaryParam.userId, addBeneficiaryParam.newbeneficiary);
+      final beneficiaries =
+          await remoteDataSource.addBenficiaryData(userId, nickName);
 
       return right(beneficiaries);
     } on ServerException catch (e) {

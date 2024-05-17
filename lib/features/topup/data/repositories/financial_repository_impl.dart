@@ -3,7 +3,6 @@ import 'package:mobile_credit/core/error/exceptions.dart';
 import 'package:mobile_credit/features/topup/data/datasources/financial_remote_data_source.dart';
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
 import 'package:mobile_credit/features/topup/domain/repository/financial_repository.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/spend_user_credit.dart';
 
 import '../../../../core/error/failures.dart';
 
@@ -28,14 +27,24 @@ class FinancialRepositoryImpl implements FinancialRepository {
   }
 
   @override
-  Future<Either<Failure, UserFinancialSummary>> postBeneficiaryCreditTrans(
-      UserSpendCreditParam userSpendCreditParam) async {
+  Future<Either<Failure, UserFinancialSummary>> postUserDebitPendTrans(
+      int userId, int beneficiaryId, double amount) async {
     try {
-      final financialSummary =
-          await remoteDataSource.postBeneficiaryCreditTransData(
-              userSpendCreditParam.userId,
-              userSpendCreditParam.beneficiaryId,
-              userSpendCreditParam.amount);
+      final financialSummary = await remoteDataSource
+          .postUserDebitPendTransData(userId, beneficiaryId, amount);
+
+      return right(financialSummary);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserFinancialSummary>> postUserDebitTrans(
+      int userId, int beneficiaryId, double amount) async {
+    try {
+      final financialSummary = await remoteDataSource.postUserDebitTransData(
+          userId, beneficiaryId, amount);
 
       return right(financialSummary);
     } on ServerException catch (e) {

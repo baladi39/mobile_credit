@@ -53,7 +53,14 @@ class _BalanceState extends State<Balance> {
                 ],
               );
             }
-            return const Loader();
+            if (state is BalanceLoading) {
+              return const Loader();
+            }
+            return Container(
+              width: 100,
+              height: 100,
+              color: Colors.orange,
+            );
           },
         ));
   }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:mobile_credit/core/constants/constants.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/spend_user_credit.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/user_debit.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/recharge/cubit/recharge_cubit.dart';
 
@@ -52,8 +52,8 @@ class _RechargeFormState extends State<RechargeForm> {
               ElevatedButton(
                 onPressed: () {
                   context.read<BalanceBloc>().add(
-                        SpendUserCreditEvent(
-                          UserSpendCreditParam(
+                        UserDebitEvent(
+                          UserTopUpParam(
                             appUserLoggedIn.user.id,
                             100,
                             state.topUpOptionValue.toDouble(),

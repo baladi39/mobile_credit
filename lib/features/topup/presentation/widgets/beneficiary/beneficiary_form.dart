@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
-import 'package:mobile_credit/features/topup/domain/entities/beneficiary.dart';
 import 'package:mobile_credit/features/topup/domain/usecases/add_beneficiary.dart';
 
 import 'bloc/beneficiary_bloc.dart';
@@ -63,13 +62,9 @@ class _BeneficiaryFormState extends State<BeneficiaryForm> {
                   context.read<BeneficiaryBloc>().add(
                         AddBeneficiariesEvent(
                           AddBeneficiaryParam(
-                              Beneficiary(
-                                beneficiaryId: 500,
-                                nickName: controller.text,
-                                mobile: '+97158666',
-                                amount: 0,
-                              ),
-                              appUserLoggedIn.user.id),
+                            controller.text,
+                            appUserLoggedIn.user.id,
+                          ),
                         ),
                       );
                   Navigator.of(context).pop();

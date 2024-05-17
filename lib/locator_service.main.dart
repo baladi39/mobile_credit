@@ -66,7 +66,7 @@ void _initFinancial() {
       ),
     )
     ..registerFactory(
-      () => SpendUserCredit(
+      () => UserDebit(
         serviceLocator(),
       ),
     );
@@ -94,6 +94,12 @@ void _initBeneficiary() {
     )
     ..registerFactory(
       () => AddBeneficiary(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => BeneficiaryCredit(
+        serviceLocator(),
         serviceLocator(),
       ),
     );
