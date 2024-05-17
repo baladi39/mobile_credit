@@ -79,7 +79,10 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
                                   builder: (_) {
                                     return BlocProvider.value(
                                       value: context.read<BalanceBloc>(),
-                                      child: const RechargeDialog(),
+                                      child: RechargeDialog(
+                                        beneficiary.beneficiaryId,
+                                        beneficiary.balance,
+                                      ),
                                     );
                                   });
                             },

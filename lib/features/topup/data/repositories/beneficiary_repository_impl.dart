@@ -26,13 +26,26 @@ class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
   }
 
   @override
-  Future<Either<Failure, List<Beneficiary>>> addBeneficiaries(
+  Future<Either<Failure, List<Beneficiary>>> postNewBeneficiary(
       int userId, String nickName) async {
     try {
       final beneficiaries =
-          await remoteDataSource.addBenficiaryData(userId, nickName);
+          await remoteDataSource.postNewBenficiaryData(userId, nickName);
 
       return right(beneficiaries);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> postBeneficiaryCredit(
+      int userId, int beneficiaryId, double amount) async {
+    try {
+      await remoteDataSource.postBeneficiaryCredit(
+          userId, beneficiaryId, amount);
+
+      return right(true);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

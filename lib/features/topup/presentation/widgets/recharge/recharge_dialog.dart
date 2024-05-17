@@ -5,7 +5,9 @@ import 'package:mobile_credit/features/topup/presentation/widgets/recharge/cubit
 import 'package:mobile_credit/features/topup/presentation/widgets/recharge/recharge_form.dart';
 
 class RechargeDialog extends StatelessWidget {
-  const RechargeDialog({super.key});
+  final int beneficiaryId;
+  final double balance;
+  const RechargeDialog(this.beneficiaryId, this.balance, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +17,15 @@ class RechargeDialog extends StatelessWidget {
         backgroundColor: Theme.of(context).dialogBackgroundColor,
         shadowColor: Colors.black,
         insetPadding: const EdgeInsets.all(24.0),
-        child: const Padding(
-          padding: EdgeInsets.all(24.0),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // Title with close button
-              DialogHeader(title: 'Recharge Beneficiary'),
+              const DialogHeader(title: 'Recharge Beneficiary'),
               // Form
-              RechargeForm()
+              RechargeForm(beneficiaryId, balance)
             ],
           ),
         ),

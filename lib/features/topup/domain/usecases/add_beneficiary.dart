@@ -13,7 +13,7 @@ class AddBeneficiary
   @override
   Future<Either<Failure, List<Beneficiary>>> call(
       AddBeneficiaryParam addBeneficiaryParam) async {
-    return await beneficiaryRepository.addBeneficiaries(
+    return await beneficiaryRepository.postNewBeneficiary(
         addBeneficiaryParam.userId, addBeneficiaryParam.nickName);
   }
 }

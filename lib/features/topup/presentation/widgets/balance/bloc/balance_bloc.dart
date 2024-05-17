@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
 import 'package:mobile_credit/features/topup/domain/usecases/beneficiary_credit.dart';
 import 'package:mobile_credit/features/topup/domain/usecases/latest_financial_summary.dart';
@@ -40,7 +41,6 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
 
       if (state is BalanceSuccess) {
         var response = await beneficiaryCredit(event.userTopUpParam);
-
         response.fold(
           (l) => emit(BalanceFailer(l.message)),
           (r) {
@@ -49,12 +49,6 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
           },
         );
       }
-
-      /// usecase for update beneficiary
-      // await Future.delayed(const Duration(seconds: 10));
-      // emit(BalancePostingSuccess());
-      // return emit(BalanceSuccess(
-      //     UserFinancialSummary(totalBalance: 0, totalMonthlySpent: 0)));
     });
   }
 }

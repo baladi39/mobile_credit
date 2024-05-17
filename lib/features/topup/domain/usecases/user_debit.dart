@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 
 import 'package:mobile_credit/core/error/failures.dart';
 import 'package:mobile_credit/core/usecase/usecase.dart';
@@ -18,16 +19,4 @@ class UserDebit implements UseCase<UserFinancialSummary, UserTopUpParam> {
       userTopUpParam.amount,
     );
   }
-}
-
-class UserTopUpParam {
-  final int userId;
-  final int beneficiaryId;
-  final double amount;
-
-  UserTopUpParam(
-    this.userId,
-    this.beneficiaryId,
-    this.amount,
-  );
 }

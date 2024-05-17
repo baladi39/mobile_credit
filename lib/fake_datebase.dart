@@ -17,17 +17,17 @@ class FakeDatebase {
         beneficiaryId: 100,
         nickName: 'Daughter',
         mobile: '+97158222',
-        amount: 0),
+        balance: 0),
     BeneficiaryModel(
         beneficiaryId: 200,
         nickName: 'Son 1',
         mobile: '+97158333',
-        amount: 100),
+        balance: 100),
     BeneficiaryModel(
         beneficiaryId: 300,
         nickName: 'Son 2',
         mobile: '+97158333',
-        amount: 100),
+        balance: 100),
   ];
 
   List<BeneficiaryModel> userTwoBeneficiaries = [
@@ -35,7 +35,7 @@ class FakeDatebase {
       beneficiaryId: 400,
       nickName: 'Son',
       mobile: '+97158555',
-      amount: 20,
+      balance: 20,
     ),
   ];
 }

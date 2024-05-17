@@ -6,7 +6,10 @@ import 'package:mobile_credit/features/topup/data/models/beneficiary_model.dart'
 
 abstract interface class BeneficiaryRemoteDataSource {
   Future<List<BeneficiaryModel>> getBenficiaryData(int userId);
-  Future<List<BeneficiaryModel>> addBenficiaryData(int userId, String nickName);
+  Future<List<BeneficiaryModel>> postNewBenficiaryData(
+      int userId, String nickName);
+  Future<void> postBeneficiaryCredit(
+      int userId, int beneficiaryId, double amount);
 }
 
 class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
@@ -33,7 +36,7 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
   }
 
   @override
-  Future<List<BeneficiaryModel>> addBenficiaryData(
+  Future<List<BeneficiaryModel>> postNewBenficiaryData(
       int userId, String nickName) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 1));
@@ -46,17 +49,43 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
           beneficiaryId: beneficiaryId,
           nickName: nickName,
           mobile: mobile,
-          amount: 0));
+          balance: 0));
       return fakeDatebase.userOneBeneficiaries;
     } else {
       fakeDatebase.userTwoBeneficiaries.add(BeneficiaryModel(
           beneficiaryId: beneficiaryId,
           nickName: nickName,
           mobile: mobile,
-          amount: 0));
+          balance: 0));
       return fakeDatebase.userTwoBeneficiaries;
     }
   }
+
+  @override
+  Future<void> postBeneficiaryCredit(
+      int userId, int beneficiaryId, double amount) async {
+    if (userId == 1) {
+      return updateBeneficiary(
+          fakeDatebase.userOneBeneficiaries, beneficiaryId, amount);
+    } else {
+      return updateBeneficiary(
+          fakeDatebase.userTwoBeneficiaries, beneficiaryId, amount);
+    }
+  }
+}
+
+void updateBeneficiary(
+    List<BeneficiaryModel> beneficiaries, int beneficiaryId, double amount) {
+  var beneficiary =
+      beneficiaries.where((a) => a.beneficiaryId == beneficiaryId).first;
+  var updatedBeneficiary = BeneficiaryModel(
+      beneficiaryId: beneficiaryId,
+      nickName: beneficiary.nickName,
+      mobile: beneficiary.mobile,
+      balance: beneficiary.balance + amount);
+
+  beneficiaries.remove(beneficiary);
+  beneficiaries.add(updatedBeneficiary);
 }
 
 int generateRandomThreeDigitNumber() {
