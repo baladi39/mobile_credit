@@ -5,9 +5,11 @@ import 'package:mobile_credit/features/topup/data/models/user_financial_summary_
 abstract interface class FinancialRemoteDataSource {
   Future<UserFinancialSummaryModel> getCurrentFinancialData(int userId);
   Future<UserFinancialSummaryModel> postUserDebitPendTransData(
-      int userId, int beneficiaryId, double amount);
+      int userId, double amount);
+  Future<UserFinancialSummaryModel> postUserRevertDebitTransData(
+      int userId, double amount);
   Future<UserFinancialSummaryModel> postUserDebitTransData(
-      int userId, int beneficiaryId, double amount);
+      int userId, double amount);
 }
 
 class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
@@ -36,7 +38,7 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
 
   @override
   Future<UserFinancialSummaryModel> postUserDebitPendTransData(
-      int userId, int beneficiaryId, double amount) async {
+      int userId, double amount) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 2));
 
@@ -72,7 +74,7 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
 
   @override
   Future<UserFinancialSummaryModel> postUserDebitTransData(
-      int userId, int beneficiaryId, double amount) async {
+      int userId, double amount) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 8));
 
@@ -95,6 +97,42 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
             fakeDatebase.userTwoFinancialSummary.totalBalance;
         var finalMonthlySpent =
             fakeDatebase.userTwoFinancialSummary.totalMonthlySpent + amount;
+
+        return fakeDatebase.userTwoFinancialSummary = UserFinancialSummaryModel(
+          totalBalance: finalTotalBalance,
+          totalMonthlySpent: finalMonthlySpent,
+        );
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserFinancialSummaryModel> postUserRevertDebitTransData(
+      int userId, double amount) async {
+    // Simmulating api call delay
+    await Future.delayed(const Duration(seconds: 2));
+
+    try {
+      // Pretend we are making api call and recieving json
+      if (userId == 1) {
+        var finalTotalBalance =
+            fakeDatebase.userOneFinancialSummary.totalBalance + amount;
+        // Transaction is reverted due to failuer
+        var finalMonthlySpent =
+            fakeDatebase.userOneFinancialSummary.totalMonthlySpent;
+
+        return fakeDatebase.userOneFinancialSummary = UserFinancialSummaryModel(
+          totalBalance: finalTotalBalance,
+          totalMonthlySpent: finalMonthlySpent,
+        );
+      } else {
+        var finalTotalBalance =
+            fakeDatebase.userTwoFinancialSummary.totalBalance + amount;
+        // Transaction is reverted due to failuer
+        var finalMonthlySpent =
+            fakeDatebase.userTwoFinancialSummary.totalMonthlySpent;
 
         return fakeDatebase.userTwoFinancialSummary = UserFinancialSummaryModel(
           totalBalance: finalTotalBalance,

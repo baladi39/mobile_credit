@@ -46,10 +46,10 @@ class _TopupViewState extends State<TopupView> {
           child: BlocListener<BalanceBloc, BalanceState>(
             listener: (context, state) {
               if (state is BalancePostingPending) {
-                showSnackBar(context, 'Pending Transaction wait 8 secs');
+                showSnackBar(context, 'Transaction Pending wait 8 secs');
               }
-              if (state is BalancePostingSuccess) {
-                showSnackBar(context, 'Successful Transaction');
+              if (state is BalancePostingProccessed) {
+                showSnackBar(context, 'Transaction Proccessed');
                 context
                     .read<BeneficiaryBloc>()
                     .add(GetBeneficiariesEvent(appUserLoggedIn.user.id));

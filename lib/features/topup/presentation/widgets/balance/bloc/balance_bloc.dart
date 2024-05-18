@@ -28,23 +28,33 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
         (r) => emit(BalanceSuccess(r)),
       );
     });
+
+    /// Streams could be used as future enhancment but streams are resource intensive and complex
+    /// Here, we focus on simulating a three-stage transaction flow :
+    /// -Debited from user balance (Pending Transaction)
+    /// -Credited to beneficiary
+    /// -Update user's monthly spent (Proccessed Transaction)
+    /// Each point can have a point of failure that needs to be handled
+    ///
+    /// In order to simulate that user's balance is debited first and beneficiary credit second
+    /// I wrote the code as such
     on<UserDebitEvent>((event, emit) async {
       var response = await userDebit(event.userTopUpParam);
 
       response.fold(
-        (l) => emit(BalanceFailer(l.message)),
+        (l) => emit(BalancePostingFailer(l.message)),
         (r) {
           emit(BalancePostingPending());
-          return emit(BalanceSuccess(r));
+          emit(BalanceSuccess(r));
         },
       );
 
       if (state is BalanceSuccess) {
         var response = await beneficiaryCredit(event.userTopUpParam);
         response.fold(
-          (l) => emit(BalanceFailer(l.message)),
+          (l) => emit(BalancePostingFailer(l.message)),
           (r) {
-            emit(BalancePostingSuccess());
+            emit(BalancePostingProccessed());
             return emit(BalanceSuccess(r));
           },
         );

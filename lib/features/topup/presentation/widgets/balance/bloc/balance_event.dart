@@ -16,7 +16,3 @@ final class UserDebitEvent extends BalanceEvent {
   final UserTopUpParam userTopUpParam;
   const UserDebitEvent(this.userTopUpParam);
 }
-
-final class BeneficiaryCreditEvent extends BalanceEvent {
-  const BeneficiaryCreditEvent();
-}

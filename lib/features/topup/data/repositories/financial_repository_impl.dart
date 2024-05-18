@@ -28,10 +28,10 @@ class FinancialRepositoryImpl implements FinancialRepository {
 
   @override
   Future<Either<Failure, UserFinancialSummary>> postUserDebitPendTrans(
-      int userId, int beneficiaryId, double amount) async {
+      int userId, double amount) async {
     try {
-      final financialSummary = await remoteDataSource
-          .postUserDebitPendTransData(userId, beneficiaryId, amount);
+      final financialSummary =
+          await remoteDataSource.postUserDebitPendTransData(userId, amount);
 
       return right(financialSummary);
     } on ServerException catch (e) {
@@ -41,10 +41,23 @@ class FinancialRepositoryImpl implements FinancialRepository {
 
   @override
   Future<Either<Failure, UserFinancialSummary>> postUserDebitTrans(
-      int userId, int beneficiaryId, double amount) async {
+      int userId, double amount) async {
     try {
-      final financialSummary = await remoteDataSource.postUserDebitTransData(
-          userId, beneficiaryId, amount);
+      final financialSummary =
+          await remoteDataSource.postUserDebitTransData(userId, amount);
+
+      return right(financialSummary);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserFinancialSummary>> postUserRevertDebitTrans(
+      int userId, double amount) async {
+    try {
+      final financialSummary =
+          await remoteDataSource.postUserDebitPendTransData(userId, amount);
 
       return right(financialSummary);
     } on ServerException catch (e) {

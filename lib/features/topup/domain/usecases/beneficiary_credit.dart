@@ -13,18 +13,29 @@ class BeneficiaryCredit
   final BeneficiaryRepository beneficiaryRepository;
   BeneficiaryCredit(this.financialRepository, this.beneficiaryRepository);
 
+  // Need to seperate this in 2 usecases
+  // UserMonthlyCredit & BeneficiaryCredit
   @override
   Future<Either<Failure, UserFinancialSummary>> call(
       UserTopUpParam userTopUpParam) async {
-    await beneficiaryRepository.postBeneficiaryCredit(
+    var response = await beneficiaryRepository.postBeneficiaryCredit(
       userTopUpParam.userId,
       userTopUpParam.beneficiaryId,
       userTopUpParam.amount,
     );
-    return await financialRepository.postUserDebitTrans(
-      userTopUpParam.userId,
-      userTopUpParam.beneficiaryId,
-      userTopUpParam.amount,
-    );
+
+    return response.fold((_) async {
+      // Revert changes
+      return await financialRepository.postUserRevertDebitTrans(
+        userTopUpParam.userId,
+        userTopUpParam.amount,
+      );
+    }, (_) async {
+      // Proceed as normal
+      return await financialRepository.postUserDebitTrans(
+        userTopUpParam.userId,
+        userTopUpParam.amount,
+      );
+    });
   }
 }

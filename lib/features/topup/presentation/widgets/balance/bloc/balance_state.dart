@@ -19,7 +19,7 @@ final class BalanceSuccess extends BalanceState {
   List<Object> get props => [userFinancialSummary];
 }
 
-final class BalancePostingSuccess extends BalanceState {}
+final class BalancePostingProccessed extends BalanceState {}
 
 final class BalancePostingPending extends BalanceState {}
 

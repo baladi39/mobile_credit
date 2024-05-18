@@ -15,7 +15,6 @@ class UserDebit implements UseCase<UserFinancialSummary, UserTopUpParam> {
       UserTopUpParam userTopUpParam) async {
     return await financialRepository.postUserDebitPendTrans(
       userTopUpParam.userId,
-      userTopUpParam.beneficiaryId,
       userTopUpParam.amount,
     );
   }
