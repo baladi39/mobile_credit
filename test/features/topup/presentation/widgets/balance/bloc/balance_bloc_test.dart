@@ -21,16 +21,13 @@ void main() {
   late MockBeneRepository beneRepository;
   late MockFinRepository finRepository;
   late BalanceBloc balanceBloc;
-  late LatestFinancialSummary latestFinancialSummary;
-  late UserDebit userDebit;
-  late BeneficiaryCredit beneficiaryCredit;
 
   setUp(() {
     beneRepository = MockBeneRepository();
     finRepository = MockFinRepository();
-    latestFinancialSummary = LatestFinancialSummary(finRepository);
-    userDebit = UserDebit(finRepository);
-    beneficiaryCredit = BeneficiaryCredit(finRepository, beneRepository);
+    var latestFinancialSummary = LatestFinancialSummary(finRepository);
+    var userDebit = UserDebit(finRepository);
+    var beneficiaryCredit = BeneficiaryCredit(finRepository, beneRepository);
 
     balanceBloc = BalanceBloc(
       latestFinancialSummary: latestFinancialSummary,
