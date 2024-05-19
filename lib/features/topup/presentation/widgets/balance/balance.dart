@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 import 'package:mobile_credit/core/utils/extensions/double_extensions.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
+import 'package:mobile_credit/core/utils/show_snackbar.dart';
+import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/bloc/beneficiary_bloc.dart';
 
 import '../../../../../core/common/cubits/app_user/app_user_cubit.dart';
 import 'bloc/balance_bloc.dart';
@@ -25,9 +28,13 @@ class _BalanceState extends State<Balance> {
 
   @override
   Widget build(BuildContext context) {
+    var appUserLoggedIn = context.read<AppUserCubit>().state as AppUserLoggedIn;
     return Padding(
         padding: const EdgeInsets.only(top: 16),
-        child: BlocBuilder<BalanceBloc, BalanceState>(
+        child: BlocConsumer<BalanceBloc, BalanceState>(
+          listener: (context, state) {
+            notificationListners(state, context, appUserLoggedIn);
+          },
           builder: (context, state) {
             if (state is BalanceSuccess) {
               return Column(
@@ -71,5 +78,18 @@ class _BalanceState extends State<Balance> {
       text,
       style: Theme.of(context).textTheme.headlineMedium,
     );
+  }
+
+  void notificationListners(BalanceState state, BuildContext context,
+      AppUserLoggedIn appUserLoggedIn) {
+    if (state is BalancePostingPending) {
+      showSnackBar(context, 'Transaction Pending wait 8 secs');
+      context
+          .read<BeneficiaryBloc>()
+          .add(CreditBeneficiariesEvent(UserTopUpParam(1, 100, 100)));
+    }
+    if (state is BalanceFailer) {
+      showSnackBar(context, state.meesage);
+    }
   }
 }

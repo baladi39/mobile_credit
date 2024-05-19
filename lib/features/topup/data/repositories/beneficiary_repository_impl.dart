@@ -39,13 +39,13 @@ class BeneficiaryRepositoryImpl implements BeneficiaryRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> postBeneficiaryCredit(
+  Future<Either<Failure, List<Beneficiary>>> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount) async {
     try {
-      await remoteDataSource.postBeneficiaryCredit(
+      var response = await remoteDataSource.postBeneficiaryCredit(
           userId, beneficiaryId, amount);
 
-      return right(true);
+      return right(response);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

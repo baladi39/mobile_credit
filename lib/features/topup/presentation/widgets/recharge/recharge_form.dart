@@ -59,7 +59,7 @@ class _RechargeFormState extends State<RechargeForm> {
     return ElevatedButton(
       onPressed: () {
         context.read<BalanceBloc>().add(
-              UserDebitEvent(
+              UserDebitPreEvent(
                 UserTopUpParam(
                   appUserLoggedIn.user.id,
                   widget.beneficiaryId,

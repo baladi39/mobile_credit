@@ -7,10 +7,15 @@ import 'package:mobile_credit/features/topup/domain/entities/user_financial_summ
 
 import 'package:mobile_credit/features/topup/domain/repository/beneficiary_repository.dart';
 import 'package:mobile_credit/features/topup/domain/repository/financial_repository.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/add_beneficiary.dart';
 import 'package:mobile_credit/features/topup/domain/usecases/beneficiary_credit.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/latest_beneficiaries.dart';
 import 'package:mobile_credit/features/topup/domain/usecases/latest_financial_summary.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/user_debit.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/user_debit_post.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/user_debit_pre.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/user_debit_revert.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
+import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/bloc/beneficiary_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBeneRepository extends Mock implements BeneficiaryRepository {}
@@ -21,18 +26,30 @@ void main() {
   late MockBeneRepository beneRepository;
   late MockFinRepository finRepository;
   late BalanceBloc balanceBloc;
+  late BeneficiaryBloc beneficiaryBloc;
 
   setUp(() {
     beneRepository = MockBeneRepository();
     finRepository = MockFinRepository();
     var latestFinancialSummary = LatestFinancialSummary(finRepository);
-    var userDebit = UserDebit(finRepository);
-    var beneficiaryCredit = BeneficiaryCredit(finRepository, beneRepository);
+    var userDebitPre = UserDebitPre(finRepository);
+    var beneficiaryCredit = BeneficiaryCredit(beneRepository);
+    var latestBeneficiaries = LatestBeneficiaries(beneRepository);
+    var userDebitPost = UserDebitPost(finRepository);
+    var userDebitRevert = UserDebitRevert(finRepository);
+    var addBeneficiary = AddBeneficiary(beneRepository);
+
+    beneficiaryBloc = BeneficiaryBloc(
+        latestBeneficiaries: latestBeneficiaries,
+        addBeneficiary: addBeneficiary,
+        beneficiaryCredit: beneficiaryCredit);
 
     balanceBloc = BalanceBloc(
       latestFinancialSummary: latestFinancialSummary,
-      userDebit: userDebit,
-      beneficiaryCredit: beneficiaryCredit,
+      userDebitPre: userDebitPre,
+      beneficiaryBloc: beneficiaryBloc,
+      userDebitPost: userDebitPost,
+      userDebitRevert: userDebitRevert,
     );
   });
 
@@ -75,21 +92,20 @@ void main() {
         BalancePostingProccessed,
         BalanceSuccess] when UserDebitEvent is added and transaction approved.''',
       build: () {
-        when(() => finRepository.postUserDebitPendTrans(1, 100))
+        when(() => finRepository.postUserDebitPre(1, 100))
             .thenAnswer((_) async => right(userPendTrans));
-        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-            .thenAnswer((_) async => right(true));
-        when(() => finRepository.postUserDebitTrans(1, 100))
+        // when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
+        //     .thenAnswer((_) async => right(true));
+        when(() => finRepository.postUserDebitPost(1, 100))
             .thenAnswer((_) async => right(userApprTrans));
 
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
         BalancePostingPending(),
         BalanceSuccess(userPendTrans),
-        BalancePostingProccessed(),
         BalanceSuccess(userApprTrans),
       ],
     );
@@ -99,12 +115,12 @@ void main() {
         BalanceLoading,
         BalancePostingFailer] when UserDebitEvent is added and debit transaction api failed.''',
       build: () {
-        when(() => finRepository.postUserDebitPendTrans(1, 100))
+        when(() => finRepository.postUserDebitPre(1, 100))
             .thenAnswer((_) async => left(Failure()));
 
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
         const BalancePostingFailer(apiErrorMessage),
@@ -119,20 +135,19 @@ void main() {
         BalancePostingProccessed,
         BalanceSuccess] when UserDebitEvent is added and credit beneficiary transaction api failed.''',
       build: () {
-        when(() => finRepository.postUserDebitPendTrans(1, 100))
+        when(() => finRepository.postUserDebitPre(1, 100))
             .thenAnswer((_) async => right(userPendTrans));
         when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
             .thenAnswer((_) async => left(Failure()));
-        when(() => finRepository.postUserRevertDebitTrans(1, 100))
-            .thenAnswer((_) async => right(userIntTrans));
+        // when(() => finRepository.postUserRevertDebitTrans(1, 100))
+        //     .thenAnswer((_) async => right(userIntTrans));
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
         BalancePostingPending(),
         BalanceSuccess(userPendTrans),
-        BalancePostingProccessed(),
         BalanceSuccess(userIntTrans),
       ],
     );
@@ -144,16 +159,16 @@ void main() {
         BalanceSuccess,
         BalancePostingFailer] when UserDebitEvent is added and update user monthlySpent api failed.''',
       build: () {
-        when(() => finRepository.postUserDebitPendTrans(1, 100))
+        when(() => finRepository.postUserDebitPre(1, 100))
             .thenAnswer((_) async => right(userPendTrans));
-        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-            .thenAnswer((_) async => right(true));
-        when(() => finRepository.postUserDebitTrans(1, 100))
+        // when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
+        //     .thenAnswer((_) async => right(true));
+        when(() => finRepository.postUserDebitPost(1, 100))
             .thenAnswer((_) async => left(Failure()));
 
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
         BalancePostingPending(),
@@ -169,16 +184,16 @@ void main() {
         BalanceSuccess,
         BalancePostingFailer] when UserDebitEvent is added with lack of funds.''',
       build: () {
-        when(() => finRepository.postUserDebitPendTrans(1, 100))
+        when(() => finRepository.postUserDebitPre(1, 100))
             .thenAnswer((_) async => right(userPendTrans));
-        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-            .thenAnswer((_) async => right(true));
-        when(() => finRepository.postUserDebitTrans(1, 100))
+        // when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
+        //     .thenAnswer((_) async => right(true));
+        when(() => finRepository.postUserDebitPost(1, 100))
             .thenAnswer((_) async => left(Failure()));
 
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
         BalancePostingPending(),

@@ -12,7 +12,17 @@ final class GetBalanceEvent extends BalanceEvent {
   const GetBalanceEvent(this.userId);
 }
 
-final class UserDebitEvent extends BalanceEvent {
+final class UserDebitPreEvent extends BalanceEvent {
   final UserTopUpParam userTopUpParam;
-  const UserDebitEvent(this.userTopUpParam);
+  const UserDebitPreEvent(this.userTopUpParam);
+}
+
+final class UserDebitPostEvent extends BalanceEvent {
+  final UserTopUpParam userTopUpParam;
+  const UserDebitPostEvent(this.userTopUpParam);
+}
+
+final class UserDebitRevertEvent extends BalanceEvent {
+  final UserTopUpParam userTopUpParam;
+  const UserDebitRevertEvent(this.userTopUpParam);
 }

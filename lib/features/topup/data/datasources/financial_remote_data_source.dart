@@ -75,7 +75,7 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
   Future<UserFinancialSummaryModel> postUserDebitTransData(
       int userId, double amount) async {
     // Simmulating api call delay
-    await Future.delayed(const Duration(seconds: 8));
+    await Future.delayed(const Duration(seconds: 2));
 
     try {
       // Pretend we are making api call and recieving json

@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:mobile_credit/core/error/exceptions.dart';
 import 'package:mobile_credit/fake_datebase.dart';
 import 'package:mobile_credit/features/topup/data/models/beneficiary_model.dart';
+import 'package:mobile_credit/features/topup/domain/entities/beneficiary.dart';
 
 abstract interface class BeneficiaryRemoteDataSource {
   Future<List<BeneficiaryModel>> getBenficiaryData(int userId);
   Future<List<BeneficiaryModel>> postNewBenficiaryData(
       int userId, String nickName);
-  Future<void> postBeneficiaryCredit(
+  Future<List<Beneficiary>> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount);
 }
 
@@ -71,22 +72,35 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
   }
 
   @override
-  Future<void> postBeneficiaryCredit(
+  Future<List<BeneficiaryModel>> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount) async {
-    Map<String, dynamic> bene = fakeDatebase.userBeneficiaries
-        .where((a) => a['user_id'] == userId)
-        .first['beneficiaries']
-        .where((a) => a['beneficiary_id'] == beneficiaryId)
-        .first;
+    await Future.delayed(const Duration(seconds: 8));
+    try {
+      List<BeneficiaryModel> beneficiaries = [];
+      var userBens = fakeDatebase.userBeneficiaries
+          .where((a) => a['user_id'] == userId)
+          .first;
+      Map<String, dynamic> bene = userBens['beneficiaries']
+          .where((a) => a['beneficiary_id'] == beneficiaryId)
+          .first;
 
-    bene.update(
-      'balance',
-      (balance) => (balance as double) + amount,
-    );
-    bene.update(
-      'monthly_deposit',
-      (deposit) => (deposit as double) + amount,
-    );
+      bene.update(
+        'balance',
+        (balance) => (balance as double) + amount,
+      );
+      bene.update(
+        'monthly_deposit',
+        (deposit) => (deposit as double) + amount,
+      );
+
+      for (var beneficiary in userBens['beneficiaries']) {
+        beneficiaries.add(BeneficiaryModel.fromJson(beneficiary));
+      }
+
+      return beneficiaries;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
   }
 }
 

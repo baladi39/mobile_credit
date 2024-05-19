@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
 import 'package:mobile_credit/core/utils/show_snackbar.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
@@ -33,7 +34,20 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.only(top: 40, bottom: 16),
-        child: BlocBuilder<BeneficiaryBloc, BeneficiaryState>(
+        child: BlocConsumer<BeneficiaryBloc, BeneficiaryState>(
+          listener: (context, state) {
+            if (state is BeneficiaryFailer) {
+              context
+                  .read<BalanceBloc>()
+                  .add(UserDebitRevertEvent(UserTopUpParam(1, 100, 100)));
+              showSnackBar(context, state.message);
+            } else if (state is BeneficiaryCreditSuccess) {
+              showSnackBar(context, 'Beneficiary is credited');
+              context
+                  .read<BalanceBloc>()
+                  .add(UserDebitPostEvent(UserTopUpParam(1, 100, 100)));
+            }
+          },
           builder: (context, state) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,12 +87,6 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
               },
             );
           });
-    }
-    if (state is BeneficiaryFailer) {
-      return Text(
-        state.message,
-        style: Theme.of(context).textTheme.headlineMedium,
-      );
     }
     return const Loader();
   }

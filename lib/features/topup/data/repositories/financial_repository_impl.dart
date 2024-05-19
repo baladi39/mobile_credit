@@ -27,7 +27,7 @@ class FinancialRepositoryImpl implements FinancialRepository {
   }
 
   @override
-  Future<Either<Failure, UserFinancialSummary>> postUserDebitPendTrans(
+  Future<Either<Failure, UserFinancialSummary>> postUserDebitPre(
       int userId, double amount) async {
     try {
       final financialSummary =
@@ -40,7 +40,7 @@ class FinancialRepositoryImpl implements FinancialRepository {
   }
 
   @override
-  Future<Either<Failure, UserFinancialSummary>> postUserDebitTrans(
+  Future<Either<Failure, UserFinancialSummary>> postUserDebitPost(
       int userId, double amount) async {
     try {
       final financialSummary =
@@ -53,7 +53,7 @@ class FinancialRepositoryImpl implements FinancialRepository {
   }
 
   @override
-  Future<Either<Failure, UserFinancialSummary>> postUserRevertDebitTrans(
+  Future<Either<Failure, UserFinancialSummary>> postUserDebitRevert(
       int userId, double amount) async {
     try {
       final financialSummary =

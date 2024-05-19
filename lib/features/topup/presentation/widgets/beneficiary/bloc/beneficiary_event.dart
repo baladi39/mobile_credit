@@ -16,3 +16,8 @@ final class AddBeneficiariesEvent extends BeneficiaryEvent {
   final AddBeneficiaryParam addBeneficiaryParam;
   const AddBeneficiariesEvent(this.addBeneficiaryParam);
 }
+
+final class CreditBeneficiariesEvent extends BeneficiaryEvent {
+  final UserTopUpParam userTopUpParam;
+  const CreditBeneficiariesEvent(this.userTopUpParam);
+}

@@ -8,6 +8,6 @@ abstract interface class BeneficiaryRepository {
   Future<Either<Failure, List<Beneficiary>>> postNewBeneficiary(
       int userId, String nickName);
 
-  Future<Either<Failure, bool>> postBeneficiaryCredit(
+  Future<Either<Failure, List<Beneficiary>>> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount);
 }

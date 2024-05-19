@@ -14,8 +14,8 @@ Future<void> locatorServices() async {
   );
 
   _initAuth();
-  _initFinancial();
   _initBeneficiary();
+  _initFinancial();
 }
 
 void _initAuth() {
@@ -65,8 +65,14 @@ void _initFinancial() {
         serviceLocator(),
       ),
     )
+    ..registerFactory(() => UserDebitPre(
+          serviceLocator(),
+        ))
+    ..registerFactory(() => UserDebitPost(
+          serviceLocator(),
+        ))
     ..registerFactory(
-      () => UserDebit(
+      () => UserDebitRevert(
         serviceLocator(),
       ),
     );
@@ -99,7 +105,6 @@ void _initBeneficiary() {
     )
     ..registerFactory(
       () => BeneficiaryCredit(
-        serviceLocator(),
         serviceLocator(),
       ),
     );
