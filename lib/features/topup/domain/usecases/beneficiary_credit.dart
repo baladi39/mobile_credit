@@ -13,8 +13,6 @@ class BeneficiaryCredit
   final BeneficiaryRepository beneficiaryRepository;
   BeneficiaryCredit(this.financialRepository, this.beneficiaryRepository);
 
-  // Need to seperate this in 2 usecases
-  // UserMonthlyCredit & BeneficiaryCredit
   @override
   Future<Either<Failure, UserFinancialSummary>> call(
       UserTopUpParam userTopUpParam) async {
@@ -24,6 +22,7 @@ class BeneficiaryCredit
       userTopUpParam.amount,
     );
 
+    /// This logic ussually should be done in the Backend but demostration purposes I did it here
     return response.fold((_) async {
       // Revert changes
       return await financialRepository.postUserRevertDebitTrans(

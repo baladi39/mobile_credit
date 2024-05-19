@@ -1,7 +1,7 @@
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
 
 class UserFinancialSummaryModel extends UserFinancialSummary {
-  UserFinancialSummaryModel({
+  const UserFinancialSummaryModel({
     required super.totalBalance,
     required super.totalMonthlySpent,
   });
@@ -9,8 +9,8 @@ class UserFinancialSummaryModel extends UserFinancialSummary {
   // Methods for converting to and from JSON format, currently not used due to mocked responses.
   factory UserFinancialSummaryModel.fromJson(Map<String, dynamic> map) {
     return UserFinancialSummaryModel(
-      totalBalance: map['total_balance'] ?? '',
-      totalMonthlySpent: map['total_monthly_spent'] ?? '',
+      totalBalance: map['total_balance'] ?? 0,
+      totalMonthlySpent: map['total_monthly_spent'] ?? 0,
     );
   }
 

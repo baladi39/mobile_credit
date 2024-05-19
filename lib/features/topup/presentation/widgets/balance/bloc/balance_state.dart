@@ -19,6 +19,16 @@ final class BalanceSuccess extends BalanceState {
   List<Object> get props => [userFinancialSummary];
 }
 
+final class BalanceFailer extends BalanceState {
+  final String meesage;
+  const BalanceFailer(this.meesage);
+}
+
+final class BalanceValidationError extends BalanceState {
+  final String meesage;
+  const BalanceValidationError(this.meesage);
+}
+
 final class BalancePostingProccessed extends BalanceState {}
 
 final class BalancePostingPending extends BalanceState {}
@@ -26,9 +36,4 @@ final class BalancePostingPending extends BalanceState {}
 final class BalancePostingFailer extends BalanceState {
   final String meesage;
   const BalancePostingFailer(this.meesage);
-}
-
-final class BalanceFailer extends BalanceState {
-  final String meesage;
-  const BalanceFailer(this.meesage);
 }

@@ -6,15 +6,17 @@ class BeneficiaryModel extends Beneficiary {
     required super.nickName,
     required super.mobile,
     required super.balance,
+    super.monthlyDeposit,
   });
 
   // Methods for converting to and from JSON format, currently not used due to mocked responses.
   factory BeneficiaryModel.fromJson(Map<String, dynamic> map) {
     return BeneficiaryModel(
-      beneficiaryId: map['beneficiaryId'] ?? '',
+      beneficiaryId: map['beneficiary_id'],
       nickName: map['nickName'] ?? '',
       mobile: map['mobile'] ?? '',
-      balance: map['amount'] ?? '',
+      balance: map['amount'] ?? 0,
+      monthlyDeposit: map['monthly_deposit'] ?? 0,
     );
   }
 

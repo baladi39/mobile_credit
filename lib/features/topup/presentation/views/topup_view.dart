@@ -45,15 +45,7 @@ class _TopupViewState extends State<TopupView> {
           ],
           child: BlocListener<BalanceBloc, BalanceState>(
             listener: (context, state) {
-              if (state is BalancePostingPending) {
-                showSnackBar(context, 'Transaction Pending wait 8 secs');
-              }
-              if (state is BalancePostingProccessed) {
-                showSnackBar(context, 'Transaction Proccessed');
-                context
-                    .read<BeneficiaryBloc>()
-                    .add(GetBeneficiariesEvent(appUserLoggedIn.user.id));
-              }
+              notificationListners(state, context, appUserLoggedIn);
             },
             child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -69,6 +61,22 @@ class _TopupViewState extends State<TopupView> {
                 )),
           )),
     );
+  }
+
+  void notificationListners(BalanceState state, BuildContext context,
+      AppUserLoggedIn appUserLoggedIn) {
+    if (state is BalancePostingPending) {
+      showSnackBar(context, 'Transaction Pending wait 8 secs');
+    }
+    if (state is BalanceValidationError) {
+      showSnackBar(context, state.meesage);
+    }
+    if (state is BalancePostingProccessed) {
+      showSnackBar(context, 'Transaction Proccessed');
+      context
+          .read<BeneficiaryBloc>()
+          .add(GetBeneficiariesEvent(appUserLoggedIn.user.id));
+    }
   }
 
   // Make AppBar a reusable widget in the future

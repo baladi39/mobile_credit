@@ -29,7 +29,7 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
       );
     });
 
-    /// Streams could be used as future enhancment but streams are resource intensive and complex
+    /// Streams (websockets or webhooks) could be used as future enhancment but streams are resource intensive and complex
     /// Here, we focus on simulating a three-stage transaction flow :
     /// -Debited from user balance (Pending Transaction)
     /// -Credited to beneficiary
@@ -40,7 +40,6 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
     /// I wrote the code as such
     on<UserDebitEvent>((event, emit) async {
       var response = await userDebit(event.userTopUpParam);
-
       response.fold(
         (l) => emit(BalancePostingFailer(l.message)),
         (r) {

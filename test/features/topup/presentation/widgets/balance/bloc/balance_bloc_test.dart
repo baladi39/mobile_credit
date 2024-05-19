@@ -37,11 +37,6 @@ void main() {
   });
 
   group('onGetBalanceEvent', () {
-    var userFinancialSummaryTest = UserFinancialSummary(
-      totalBalance: 1000,
-      totalMonthlySpent: 100,
-    );
-
     blocTest<BalanceBloc, BalanceState>(
       'emits [BalanceLoading, BalanceSuccess] when GetBalanceEvent is added.',
       build: () {
@@ -57,7 +52,7 @@ void main() {
     );
 
     blocTest<BalanceBloc, BalanceState>(
-      'emits [BalanceLoading, BalanceFailer] when GetBalanceEvent is added with failure.',
+      'emits [BalanceLoading, BalanceFailer] when GetBalanceEvent is added with api failure.',
       build: () {
         when(() => finRepository.getFinancialSummary(1))
             .thenAnswer((_) async => left(Failure()));
@@ -66,24 +61,12 @@ void main() {
       act: (bloc) => bloc.add(const GetBalanceEvent(1)),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        const BalanceFailer('An unexpected error occurred')
+        const BalanceFailer(apiErrorMessage)
       ],
     );
   });
 
   group('onUserDebitEvent', () {
-    var userIntTrans = UserFinancialSummary(
-      totalBalance: 1000,
-      totalMonthlySpent: 100,
-    );
-    var userPendTrans = UserFinancialSummary(
-      totalBalance: 900,
-      totalMonthlySpent: 100,
-    );
-    var userApprTrans = UserFinancialSummary(
-      totalBalance: 900,
-      totalMonthlySpent: 200,
-    );
     blocTest<BalanceBloc, BalanceState>(
       '''emits [
         BalanceLoading,
@@ -114,7 +97,7 @@ void main() {
     blocTest<BalanceBloc, BalanceState>(
       '''emits [
         BalanceLoading,
-        BalancePostingFailer] when UserDebitEvent is added and debit transaction failed.''',
+        BalancePostingFailer] when UserDebitEvent is added and debit transaction api failed.''',
       build: () {
         when(() => finRepository.postUserDebitPendTrans(1, 100))
             .thenAnswer((_) async => left(Failure()));
@@ -124,28 +107,15 @@ void main() {
       act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        const BalancePostingFailer('An unexpected error occurred'),
+        const BalancePostingFailer(apiErrorMessage),
       ],
     );
 
     blocTest<BalanceBloc, BalanceState>(
       '''emits [
         BalanceLoading,
-        BalancePostingPending,
-        BalanceSuccess,
-        BalancePostingProccessed
-        BalanceSuccess
-] when UserDebitEvent is added and credit beneficiary transaction failed.''',
-      build: () {
-        when(() => finRepository.postUserDebitPendTrans(1, 100))
-            .thenAnswer((_) async => right(userPendTrans));
-        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-            .thenAnswer((_) async => left(Failure()));
-        when(() => finRepository.postUserRevertDebitTrans(1, 100))
-            .thenAnswer((_) async => right(userIntTrans));
-
-        return balanceBloc;
-      },
+        BalanceValidationErrro] when UserDebitEvent is added and credit beneficiary transaction api failed.''',
+      build: () => balanceBloc,
       act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
@@ -161,7 +131,7 @@ void main() {
         BalanceLoading,
         BalancePostingPending,
         BalanceSuccess,
-        BalancePostingFailer] when UserDebitEvent is added and update user monthlySpent failed.''',
+        BalancePostingFailer] when UserDebitEvent is added and update user monthlySpent api failed.''',
       build: () {
         when(() => finRepository.postUserDebitPendTrans(1, 100))
             .thenAnswer((_) async => right(userPendTrans));
@@ -177,8 +147,53 @@ void main() {
         BalanceLoading(),
         BalancePostingPending(),
         BalanceSuccess(userPendTrans),
-        const BalancePostingFailer('An unexpected error occurred'),
+        const BalancePostingFailer(apiErrorMessage),
+      ],
+    );
+
+    blocTest<BalanceBloc, BalanceState>(
+      '''emits [
+        BalanceLoading,
+        BalancePostingPending,
+        BalanceSuccess,
+        BalancePostingFailer] when UserDebitEvent is added with lack of funds.''',
+      build: () {
+        when(() => finRepository.postUserDebitPendTrans(1, 100))
+            .thenAnswer((_) async => right(userPendTrans));
+        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
+            .thenAnswer((_) async => right(true));
+        when(() => finRepository.postUserDebitTrans(1, 100))
+            .thenAnswer((_) async => left(Failure()));
+
+        return balanceBloc;
+      },
+      act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
+      expect: () => <BalanceState>[
+        BalanceLoading(),
+        BalancePostingPending(),
+        BalanceSuccess(userPendTrans),
+        const BalancePostingFailer(apiErrorMessage),
       ],
     );
   });
 }
+
+var userFinancialSummaryTest = const UserFinancialSummary(
+  totalBalance: 1000,
+  totalMonthlySpent: 100,
+);
+
+var userIntTrans = const UserFinancialSummary(
+  totalBalance: 1000,
+  totalMonthlySpent: 100,
+);
+var userPendTrans = const UserFinancialSummary(
+  totalBalance: 900,
+  totalMonthlySpent: 100,
+);
+var userApprTrans = const UserFinancialSummary(
+  totalBalance: 900,
+  totalMonthlySpent: 200,
+);
+
+const apiErrorMessage = 'An unexpected error occurred';

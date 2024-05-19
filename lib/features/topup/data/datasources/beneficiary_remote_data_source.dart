@@ -15,6 +15,7 @@ abstract interface class BeneficiaryRemoteDataSource {
 class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
   final FakeDatebase fakeDatebase;
   BeneficiaryRemoteDataSourceImpl(
+    /// Usually I would use the fakedatabase for testing ONLY but I am including here for demostration
     this.fakeDatebase,
   );
 
