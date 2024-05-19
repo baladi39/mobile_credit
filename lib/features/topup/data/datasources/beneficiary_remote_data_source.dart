@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:mobile_credit/core/constants/constants.dart';
 import 'package:mobile_credit/core/error/exceptions.dart';
 import 'package:mobile_credit/fake_datebase.dart';
 import 'package:mobile_credit/features/topup/data/models/beneficiary_model.dart';
@@ -74,15 +75,32 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
   @override
   Future<List<BeneficiaryModel>> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount) async {
-    await Future.delayed(const Duration(seconds: 8));
+    //// Change if you do not wait 8 seconds for every test
+    //await Future.delayed(const Duration(seconds: 8));
+    await Future.delayed(const Duration(seconds: 1));
     try {
       List<BeneficiaryModel> beneficiaries = [];
-      var userBens = fakeDatebase.userBeneficiaries
+
+      Map<String, dynamic> userBens = fakeDatebase.userBeneficiaries
           .where((a) => a['user_id'] == userId)
           .first;
       Map<String, dynamic> bene = userBens['beneficiaries']
           .where((a) => a['beneficiary_id'] == beneficiaryId)
           .first;
+
+      // Check if user is verification
+      var isUserVerified = fakeDatebase.users
+          .where((a) => a['user_id'] == userId)
+          .first['is_verifed'];
+
+      double monthlyLimit = isUserVerified
+          ? Constants.beneficiarySpendLimitVerified
+          : Constants.beneficiarySpendLimitUnVerified;
+      double futureBeneficiaryMonthlyBalance = bene['monthly_deposit'] + amount;
+
+      if (futureBeneficiaryMonthlyBalance > monthlyLimit) {
+        throw const ServerException('Monthly limit reached');
+      }
 
       bene.update(
         'balance',

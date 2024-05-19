@@ -110,6 +110,38 @@ void main() {
       // Assert
       expect(result, creditedBeneficiary);
     });
+
+    test(
+        'Posting beneficiary credit with non-verfied user exciding 1000/month/beneficiary limit negative scenario',
+        () async {
+      // Arrange
+      var beneficiaryId = 503;
+      var amount = 100.0;
+      var userId = 2;
+
+      // Act
+      var result = beneficiaryRemoteDataSource.postBeneficiaryCredit(
+          userId, beneficiaryId, amount);
+
+      // Assert
+      expect(result, throwsA(const TypeMatcher<ServerException>()));
+    });
+
+    test(
+        'Posting beneficiary credit with verfied user exciding 500/month/beneficiary limit negative scenario',
+        () async {
+      // Arrange
+      var beneficiaryId = 504;
+      var amount = 100.0;
+      var userId = 1;
+
+      // Act
+      var result = beneficiaryRemoteDataSource.postBeneficiaryCredit(
+          userId, beneficiaryId, amount);
+
+      // Assert
+      expect(result, throwsA(const TypeMatcher<ServerException>()));
+    });
   });
 }
 
@@ -129,5 +161,11 @@ var testBenficiaries = [
     mobile: '+97158556',
     balance: 13.0,
     monthlyDeposit: 0,
-  )
+  ),
+  const BeneficiaryModel(
+      beneficiaryId: 503,
+      nickName: 'Daughter 3',
+      mobile: '+97158559',
+      balance: 13.0,
+      monthlyDeposit: 990.0)
 ];

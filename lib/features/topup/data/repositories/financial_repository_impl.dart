@@ -31,7 +31,7 @@ class FinancialRepositoryImpl implements FinancialRepository {
       int userId, double amount) async {
     try {
       final financialSummary =
-          await remoteDataSource.postUserDebitPendTransData(userId, amount);
+          await remoteDataSource.postUserDebitPreTransData(userId, amount);
 
       return right(financialSummary);
     } on ServerException catch (e) {
@@ -44,7 +44,7 @@ class FinancialRepositoryImpl implements FinancialRepository {
       int userId, double amount) async {
     try {
       final financialSummary =
-          await remoteDataSource.postUserDebitTransData(userId, amount);
+          await remoteDataSource.postUserDebitPostTransData(userId, amount);
 
       return right(financialSummary);
     } on ServerException catch (e) {
@@ -57,7 +57,7 @@ class FinancialRepositoryImpl implements FinancialRepository {
       int userId, double amount) async {
     try {
       final financialSummary =
-          await remoteDataSource.postUserDebitPendTransData(userId, amount);
+          await remoteDataSource.postUserDebitPreTransData(userId, amount);
 
       return right(financialSummary);
     } on ServerException catch (e) {

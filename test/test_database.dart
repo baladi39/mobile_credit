@@ -1,5 +1,4 @@
 import 'package:mobile_credit/fake_datebase.dart';
-import 'package:mobile_credit/features/topup/data/models/beneficiary_model.dart';
 
 class TestDatebase implements FakeDatebase {
   @override
@@ -32,6 +31,13 @@ class TestDatebase implements FakeDatebase {
         'total_monthly_spent': 390.00
       },
     },
+    {
+      'user_id': 6,
+      'financial_summary': {
+        'total_balance': 100,
+        'total_monthly_spent': 2990.00
+      },
+    },
   ];
 
   @override
@@ -60,6 +66,13 @@ class TestDatebase implements FakeDatebase {
           'balance': 0.0,
           'monthly_deposit': 0.0,
         },
+        {
+          'beneficiary_id': 504,
+          'nickName': 'Daughter 4',
+          'mobile': '+97158549',
+          'balance': 0.0,
+          'monthly_deposit': 460.0,
+        },
       ],
     },
     {
@@ -79,37 +92,30 @@ class TestDatebase implements FakeDatebase {
           'balance': 13.0,
           'monthly_deposit': 0.0,
         },
+        {
+          'beneficiary_id': 503,
+          'nickName': 'Daughter 3',
+          'mobile': '+97158559',
+          'balance': 13.0,
+          'monthly_deposit': 990.0,
+        },
       ],
     },
   ];
 
   @override
-  List<BeneficiaryModel> userOneBeneficiaries = [
-    const BeneficiaryModel(
-        beneficiaryId: 100,
-        nickName: 'Daughter',
-        mobile: '+97158222',
-        balance: 0),
-    const BeneficiaryModel(
-        beneficiaryId: 200,
-        nickName: 'Son 1',
-        mobile: '+97158333',
-        balance: 100),
-    const BeneficiaryModel(
-        beneficiaryId: 300,
-        nickName: 'Son 2',
-        mobile: '+97158333',
-        balance: 100),
-  ];
-
-  @override
-  List<BeneficiaryModel> userTwoBeneficiaries = [
-    const BeneficiaryModel(
-      beneficiaryId: 400,
-      nickName: 'Son',
-      mobile: '+97158555',
-      balance: 0,
-      monthlyDeposit: 0,
-    ),
+  List<Map<String, dynamic>> users = [
+    {
+      'user_id': 1,
+      'email': 'sally@yopmail.com',
+      'name': 'Sally Myers',
+      'is_verifed': true,
+    },
+    {
+      'user_id': 2,
+      'email': 'carla@yopmail.com',
+      'name': 'Carla Cruz',
+      'is_verifed': false,
+    },
   ];
 }

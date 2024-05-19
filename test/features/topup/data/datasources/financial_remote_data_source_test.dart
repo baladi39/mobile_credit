@@ -43,7 +43,7 @@ void main() {
           totalBalance: 3899.20, totalMonthlySpent: 100);
       var amount = 100.00;
       // Act
-      var result = await financialRemoteDataSource.postUserDebitPendTransData(
+      var result = await financialRemoteDataSource.postUserDebitPreTransData(
           testUserId, amount);
       // Assert
       expect(result, userFinSummaryPend);
@@ -57,20 +57,32 @@ void main() {
       var amount = 100.00;
       // Act
       var result =
-          financialRemoteDataSource.postUserDebitPendTransData(userId, amount);
+          financialRemoteDataSource.postUserDebitPreTransData(userId, amount);
       // Assert
       expect(result, throwsA(const TypeMatcher<ServerException>()));
     });
 
     test(
-        'Post a pending transaction. User balance is enought with transaction fee and api should return error of insufficient funds',
+        'Post a pending transaction. User balance is note enough with transaction fee and api should return error of insufficient funds',
         () async {
       // Arrange
       var userId = 5; // insufficient funds user
       var amount = 100.00;
       // Act
       var result =
-          financialRemoteDataSource.postUserDebitPendTransData(userId, amount);
+          financialRemoteDataSource.postUserDebitPreTransData(userId, amount);
+      // Assert
+      expect(result, throwsA(const TypeMatcher<ServerException>()));
+    });
+    test(
+        'Post a pending transaction. User balance monthly spending will be reached with pending transaction should return error of monthly limit reached',
+        () async {
+      // Arrange
+      var userId = 6; // about to reach their monthly limit
+      var amount = 100.00;
+      // Act
+      var result =
+          financialRemoteDataSource.postUserDebitPreTransData(userId, amount);
       // Assert
       expect(result, throwsA(const TypeMatcher<ServerException>()));
     });
@@ -81,7 +93,7 @@ void main() {
       var amount = 100.00;
       // Act
       var result =
-          financialRemoteDataSource.postUserDebitPendTransData(userId, amount);
+          financialRemoteDataSource.postUserDebitPreTransData(userId, amount);
       // Assert
       expect(result, throwsA(const TypeMatcher<ServerException>()));
     });
@@ -97,10 +109,10 @@ void main() {
       var amount = 100.00;
       // Act
       // Debiting user balance
-      await financialRemoteDataSource.postUserDebitPendTransData(
+      await financialRemoteDataSource.postUserDebitPreTransData(
           testUserId, amount);
       // Updating user monthly spending (there is  8 sec delay...)
-      var result = await financialRemoteDataSource.postUserDebitTransData(
+      var result = await financialRemoteDataSource.postUserDebitPostTransData(
           testUserId, amount);
       // Assert
       expect(result, userFinSummarySuccess);
@@ -117,7 +129,7 @@ void main() {
       var amount = 100.00;
       // Act
       // Debiting user balance
-      await financialRemoteDataSource.postUserDebitPendTransData(
+      await financialRemoteDataSource.postUserDebitPreTransData(
           testUserId, amount);
       // Updating/Revert user balance (there is  2 sec delay...)
       var result = await financialRemoteDataSource.postUserRevertDebitTransData(

@@ -5,11 +5,11 @@ import 'package:mobile_credit/features/topup/data/models/user_financial_summary_
 
 abstract interface class FinancialRemoteDataSource {
   Future<UserFinancialSummaryModel> getCurrentFinancialData(int userId);
-  Future<UserFinancialSummaryModel> postUserDebitPendTransData(
+  Future<UserFinancialSummaryModel> postUserDebitPreTransData(
       int userId, double amount);
   Future<UserFinancialSummaryModel> postUserRevertDebitTransData(
       int userId, double amount);
-  Future<UserFinancialSummaryModel> postUserDebitTransData(
+  Future<UserFinancialSummaryModel> postUserDebitPostTransData(
       int userId, double amount);
 }
 
@@ -40,7 +40,7 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
   }
 
   @override
-  Future<UserFinancialSummaryModel> postUserDebitPendTransData(
+  Future<UserFinancialSummaryModel> postUserDebitPreTransData(
       int userId, double amount) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 2));
@@ -51,28 +51,33 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
           .where((a) => a['user_id'] == userId)
           .first;
 
-      /// This logic should be in the backend
       double totalBalance = userFin['financial_summary']['total_balance'];
+      double totalMonthlySpent =
+          userFin['financial_summary']['total_monthly_spent'];
 
-      if (totalBalance > (amount + Constants.transactionFee)) {
-        double finalTotalBalance = userFin['financial_summary']
-                ['total_balance'] -
-            (amount + Constants.transactionFee);
-
-        userFin['financial_summary'].update(
-          'total_balance',
-          (_) => finalTotalBalance,
-        );
-        return UserFinancialSummaryModel.fromJson(userFin['financial_summary']);
+      if (totalBalance < (amount + Constants.transactionFee)) {
+        throw const ServerException('Insufficient funds');
       }
-      throw const ServerException('Insufficient funds');
+
+      if (Constants.monthlySpendLimit > (amount + totalMonthlySpent)) {
+        throw const ServerException('User monthly limit reached');
+      }
+
+      double finalTotalBalance = userFin['financial_summary']['total_balance'] -
+          (amount + Constants.transactionFee);
+
+      userFin['financial_summary'].update(
+        'total_balance',
+        (_) => finalTotalBalance,
+      );
+      return UserFinancialSummaryModel.fromJson(userFin['financial_summary']);
     } catch (e) {
       throw ServerException(e.toString());
     }
   }
 
   @override
-  Future<UserFinancialSummaryModel> postUserDebitTransData(
+  Future<UserFinancialSummaryModel> postUserDebitPostTransData(
       int userId, double amount) async {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 2));
@@ -83,7 +88,6 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
           .where((a) => a['user_id'] == userId)
           .first;
 
-      /// This logic should be in the backend
       double finalTotalMonthlySpent =
           userFin['financial_summary']['total_monthly_spent'] + amount;
 
@@ -108,7 +112,6 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
           .where((a) => a['user_id'] == userId)
           .first;
 
-      /// This logic should be in the backend
       double totalBalance = userFin['financial_summary']['total_balance'];
 
       double finalTotalBalance =

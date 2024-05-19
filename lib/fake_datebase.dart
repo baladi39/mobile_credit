@@ -1,6 +1,19 @@
-import 'features/topup/data/models/beneficiary_model.dart';
-
 class FakeDatebase {
+  List<Map<String, dynamic>> users = [
+    {
+      'user_id': 1,
+      'email': 'sally@yopmail.com',
+      'name': 'Sally Myers',
+      'is_verifed': true,
+    },
+    {
+      'user_id': 2,
+      'email': 'carla@yopmail.com',
+      'name': 'Carla Cruz',
+      'is_verifed': false,
+    },
+  ];
+
   List<Map<String, dynamic>> usersFinSummary = [
     {
       'user_id': 1,
@@ -71,33 +84,5 @@ class FakeDatebase {
         },
       ],
     },
-  ];
-
-  List<BeneficiaryModel> userOneBeneficiaries = [
-    const BeneficiaryModel(
-        beneficiaryId: 100,
-        nickName: 'Daughter',
-        mobile: '+97158222',
-        balance: 0),
-    const BeneficiaryModel(
-        beneficiaryId: 200,
-        nickName: 'Son 1',
-        mobile: '+97158333',
-        balance: 100),
-    const BeneficiaryModel(
-        beneficiaryId: 300,
-        nickName: 'Son 2',
-        mobile: '+97158333',
-        balance: 100),
-  ];
-
-  List<BeneficiaryModel> userTwoBeneficiaries = [
-    const BeneficiaryModel(
-      beneficiaryId: 400,
-      nickName: 'Son',
-      mobile: '+97158555',
-      balance: 0,
-      monthlyDeposit: 0,
-    ),
   ];
 }
