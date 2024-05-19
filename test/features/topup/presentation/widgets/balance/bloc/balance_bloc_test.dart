@@ -114,7 +114,10 @@ void main() {
     blocTest<BalanceBloc, BalanceState>(
       '''emits [
         BalanceLoading,
-        BalanceValidationErrro] when UserDebitEvent is added and credit beneficiary transaction api failed.''',
+        BalancePostingPending,
+        BalanceSuccess,
+        BalancePostingProccessed,
+        BalanceSuccess] when UserDebitEvent is added and credit beneficiary transaction api failed.''',
       build: () {
         when(() => finRepository.postUserDebitPendTrans(1, 100))
             .thenAnswer((_) async => right(userPendTrans));

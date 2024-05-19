@@ -68,7 +68,7 @@ class _TopupViewState extends State<TopupView> {
     if (state is BalancePostingPending) {
       showSnackBar(context, 'Transaction Pending wait 8 secs');
     }
-    if (state is BalanceValidationError) {
+    if (state is BalanceFailer) {
       showSnackBar(context, state.meesage);
     }
     if (state is BalancePostingProccessed) {

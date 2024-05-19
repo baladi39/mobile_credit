@@ -24,11 +24,6 @@ final class BalanceFailer extends BalanceState {
   const BalanceFailer(this.meesage);
 }
 
-final class BalanceValidationError extends BalanceState {
-  final String meesage;
-  const BalanceValidationError(this.meesage);
-}
-
 final class BalancePostingProccessed extends BalanceState {}
 
 final class BalancePostingPending extends BalanceState {}

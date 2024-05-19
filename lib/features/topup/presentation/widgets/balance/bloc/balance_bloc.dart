@@ -29,7 +29,6 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
       );
     });
 
-    /// Streams (websockets or webhooks) could be used as future enhancment but streams are resource intensive and complex
     /// Here, we focus on simulating a three-stage transaction flow :
     /// -Debited from user balance (Pending Transaction)
     /// -Credited to beneficiary

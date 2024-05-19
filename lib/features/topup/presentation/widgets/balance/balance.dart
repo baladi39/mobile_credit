@@ -44,15 +44,6 @@ class _BalanceState extends State<Balance> {
                 ],
               );
             }
-            if (state is BalanceFailer) {
-              return Row(
-                children: [
-                  generalText(
-                    state.meesage.toString(),
-                  ),
-                ],
-              );
-            }
             if (state is BalanceLoading) {
               return const Loader();
             }
