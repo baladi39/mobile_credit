@@ -16,6 +16,7 @@ abstract interface class FinancialRemoteDataSource {
 class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
   FinancialRemoteDataSourceImpl(
     /// Usually I would use the fakedatabase for testing ONLY but I am including here for demostration
+    /// So I created fake database which is implemented to a test database
     this.fakeDatebase,
   );
 

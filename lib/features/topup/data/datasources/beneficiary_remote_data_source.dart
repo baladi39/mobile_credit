@@ -24,13 +24,18 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 2));
 
+    // Pretend we are making api call and recieving json
     try {
-      // Pretend we are making api call and recieving json
-      if (userId == 1) {
-        return fakeDatebase.userOneBeneficiaries;
-      } else {
-        return fakeDatebase.userTwoBeneficiaries;
+      List<BeneficiaryModel> beneficiaries = [];
+      var userBens = fakeDatebase.userBeneficiaries
+          .where((a) => a['user_id'] == userId)
+          .first;
+
+      for (var beneficiary in userBens['beneficiaries']) {
+        beneficiaries.add(BeneficiaryModel.fromJson(beneficiary));
       }
+
+      return beneficiaries;
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -42,51 +47,47 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
     // Simmulating api call delay
     await Future.delayed(const Duration(seconds: 1));
 
+    List<BeneficiaryModel> beneficiaries = [];
     var beneficiaryId = generateRandomThreeDigitNumber();
     var mobile = generateRandomPhoneNumber();
 
-    if (userId == 1) {
-      fakeDatebase.userOneBeneficiaries.add(BeneficiaryModel(
-          beneficiaryId: beneficiaryId,
-          nickName: nickName,
-          mobile: mobile,
-          balance: 0));
-      return fakeDatebase.userOneBeneficiaries;
-    } else {
-      fakeDatebase.userTwoBeneficiaries.add(BeneficiaryModel(
-          beneficiaryId: beneficiaryId,
-          nickName: nickName,
-          mobile: mobile,
-          balance: 0));
-      return fakeDatebase.userTwoBeneficiaries;
+    Map<String, dynamic> userBens = fakeDatebase.userBeneficiaries
+        .where((a) => a['user_id'] == userId)
+        .first;
+    var newBen = {
+      'beneficiary_id': beneficiaryId,
+      'nickName': nickName,
+      'mobile': mobile,
+      'balance': 0.0,
+      'monthly_deposit': 0.0,
+    };
+    userBens['beneficiaries'].add(newBen);
+
+    for (var beneficiary in userBens['beneficiaries']) {
+      beneficiaries.add(BeneficiaryModel.fromJson(beneficiary));
     }
+
+    return beneficiaries;
   }
 
   @override
   Future<void> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount) async {
-    if (userId == 1) {
-      return updateBeneficiary(
-          fakeDatebase.userOneBeneficiaries, beneficiaryId, amount);
-    } else {
-      return updateBeneficiary(
-          fakeDatebase.userTwoBeneficiaries, beneficiaryId, amount);
-    }
+    Map<String, dynamic> bene = fakeDatebase.userBeneficiaries
+        .where((a) => a['user_id'] == userId)
+        .first['beneficiaries']
+        .where((a) => a['beneficiary_id'] == beneficiaryId)
+        .first;
+
+    bene.update(
+      'balance',
+      (balance) => (balance as double) + amount,
+    );
+    bene.update(
+      'monthly_deposit',
+      (deposit) => (deposit as double) + amount,
+    );
   }
-}
-
-void updateBeneficiary(
-    List<BeneficiaryModel> beneficiaries, int beneficiaryId, double amount) {
-  var beneficiary =
-      beneficiaries.where((a) => a.beneficiaryId == beneficiaryId).first;
-  var updatedBeneficiary = BeneficiaryModel(
-      beneficiaryId: beneficiaryId,
-      nickName: beneficiary.nickName,
-      mobile: beneficiary.mobile,
-      balance: beneficiary.balance + amount);
-
-  beneficiaries.remove(beneficiary);
-  beneficiaries.add(updatedBeneficiary);
 }
 
 int generateRandomThreeDigitNumber() {

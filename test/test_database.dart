@@ -1,6 +1,8 @@
-import 'features/topup/data/models/beneficiary_model.dart';
+import 'package:mobile_credit/fake_datebase.dart';
+import 'package:mobile_credit/features/topup/data/models/beneficiary_model.dart';
 
-class FakeDatebase {
+class TestDatebase implements FakeDatebase {
+  @override
   List<Map<String, dynamic>> usersFinSummary = [
     {
       'user_id': 1,
@@ -32,6 +34,7 @@ class FakeDatebase {
     },
   ];
 
+  @override
   List<Map<String, dynamic>> userBeneficiaries = [
     {
       'user_id': 1,
@@ -69,10 +72,18 @@ class FakeDatebase {
           'balance': 0.0,
           'monthly_deposit': 0.0,
         },
+        {
+          'beneficiary_id': 500,
+          'nickName': 'Daughter 2',
+          'mobile': '+97158556',
+          'balance': 13.0,
+          'monthly_deposit': 0.0,
+        },
       ],
     },
   ];
 
+  @override
   List<BeneficiaryModel> userOneBeneficiaries = [
     const BeneficiaryModel(
         beneficiaryId: 100,
@@ -91,6 +102,7 @@ class FakeDatebase {
         balance: 100),
   ];
 
+  @override
   List<BeneficiaryModel> userTwoBeneficiaries = [
     const BeneficiaryModel(
       beneficiaryId: 400,

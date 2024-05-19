@@ -92,9 +92,9 @@ void main() {
 }
 
 List<Beneficiary> beneficiaries = [
-  Beneficiary(
+  const Beneficiary(
       beneficiaryId: 900, nickName: 'Mr. Test', mobile: '+96158678', balance: 0)
 ];
 
-var beneficiaryToBeAdded = Beneficiary(
+var beneficiaryToBeAdded = const Beneficiary(
     beneficiaryId: 901, nickName: 'New Guy', mobile: '+96158777', balance: 0);

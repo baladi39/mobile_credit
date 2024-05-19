@@ -1,7 +1,7 @@
 import 'package:mobile_credit/features/topup/domain/entities/beneficiary.dart';
 
 class BeneficiaryModel extends Beneficiary {
-  BeneficiaryModel({
+  const BeneficiaryModel({
     required super.beneficiaryId,
     required super.nickName,
     required super.mobile,
@@ -15,7 +15,7 @@ class BeneficiaryModel extends Beneficiary {
       beneficiaryId: map['beneficiary_id'],
       nickName: map['nickName'] ?? '',
       mobile: map['mobile'] ?? '',
-      balance: map['amount'] ?? 0,
+      balance: map['balance'] ?? 0,
       monthlyDeposit: map['monthly_deposit'] ?? 0,
     );
   }

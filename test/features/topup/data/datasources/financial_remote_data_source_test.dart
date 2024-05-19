@@ -1,15 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile_credit/core/error/exceptions.dart';
-import 'package:mobile_credit/fake_datebase.dart';
 import 'package:mobile_credit/features/topup/data/datasources/financial_remote_data_source.dart';
 import 'package:mobile_credit/features/topup/data/models/user_financial_summary_model.dart';
 
+import '../../../../test_database.dart';
+
 void main() {
   late FinancialRemoteDataSource financialRemoteDataSource;
-  late FakeDatebase fakeDatebase;
+  late TestDatebase testDatebase;
   setUp(() {
-    fakeDatebase = FakeDatebase();
-    financialRemoteDataSource = FinancialRemoteDataSourceImpl(fakeDatebase);
+    testDatebase = TestDatebase();
+    financialRemoteDataSource = FinancialRemoteDataSourceImpl(testDatebase);
   });
   group('GetCurrentFinacialData', () {
     test('Getting user financial summary positive scenario', () async {

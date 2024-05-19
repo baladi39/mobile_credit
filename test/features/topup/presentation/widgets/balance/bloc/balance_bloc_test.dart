@@ -115,7 +115,15 @@ void main() {
       '''emits [
         BalanceLoading,
         BalanceValidationErrro] when UserDebitEvent is added and credit beneficiary transaction api failed.''',
-      build: () => balanceBloc,
+      build: () {
+        when(() => finRepository.postUserDebitPendTrans(1, 100))
+            .thenAnswer((_) async => right(userPendTrans));
+        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
+            .thenAnswer((_) async => left(Failure()));
+        when(() => finRepository.postUserRevertDebitTrans(1, 100))
+            .thenAnswer((_) async => right(userIntTrans));
+        return balanceBloc;
+      },
       act: (bloc) => bloc.add(UserDebitEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
