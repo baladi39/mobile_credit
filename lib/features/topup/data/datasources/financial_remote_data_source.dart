@@ -65,7 +65,7 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
         );
         return UserFinancialSummaryModel.fromJson(userFin['financial_summary']);
       }
-      throw const ServerException('insufficient funds');
+      throw const ServerException('Insufficient funds');
     } catch (e) {
       throw ServerException(e.toString());
     }

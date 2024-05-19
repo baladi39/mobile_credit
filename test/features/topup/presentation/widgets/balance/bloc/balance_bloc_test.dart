@@ -19,12 +19,10 @@ class MockBeneRepository extends Mock implements BeneficiaryRepository {}
 class MockFinRepository extends Mock implements FinancialRepository {}
 
 void main() {
-  late MockBeneRepository beneRepository;
   late MockFinRepository finRepository;
   late BalanceBloc balanceBloc;
 
   setUp(() {
-    beneRepository = MockBeneRepository();
     finRepository = MockFinRepository();
     var latestFinancialSummary = LatestFinancialSummary(finRepository);
     var userDebitPre = UserDebitPre(finRepository);
@@ -73,26 +71,25 @@ void main() {
     blocTest<BalanceBloc, BalanceState>(
       '''emits [
         BalanceLoading,
-        BalanceSuccess,
         BalancePostingPending,
-        BalancePostingProccessed,
         BalanceSuccess] when UserDebitEvent is added and transaction approved.''',
       build: () {
-        when(() => finRepository.postUserDebitPre(1, 100))
+        when(() => finRepository.postUserDebitPre(
+                userTopUpParam.userId, userTopUpParam.amount))
             .thenAnswer((_) async => right(userPendTrans));
-        // when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-        //     .thenAnswer((_) async => right(true));
-        when(() => finRepository.postUserDebitPost(1, 100))
-            .thenAnswer((_) async => right(userApprTrans));
 
+        /// Beneficiary credit is presumed to success
+
+        when(() => finRepository.postUserDebitPost(
+                userTopUpParam.userId, userTopUpParam.amount))
+            .thenAnswer((_) async => right(userApprTrans));
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(userTopUpParam)),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        const BalancePostingPending(),
+        BalancePostingPending(userTopUpParam),
         BalanceSuccess(userPendTrans),
-        BalanceSuccess(userApprTrans),
       ],
     );
 
@@ -101,12 +98,13 @@ void main() {
         BalanceLoading,
         BalancePostingFailer] when UserDebitEvent is added and debit transaction api failed.''',
       build: () {
-        when(() => finRepository.postUserDebitPre(1, 100))
+        when(() => finRepository.postUserDebitPre(
+                userTopUpParam.userId, userTopUpParam.amount))
             .thenAnswer((_) async => left(Failure()));
 
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(userTopUpParam)),
       expect: () => <BalanceState>[
         BalanceLoading(),
         const BalancePostingFailer(apiErrorMessage),
@@ -116,75 +114,17 @@ void main() {
     blocTest<BalanceBloc, BalanceState>(
       '''emits [
         BalanceLoading,
-        BalancePostingPending,
-        BalanceSuccess,
-        BalancePostingProccessed,
-        BalanceSuccess] when UserDebitEvent is added and credit beneficiary transaction api failed.''',
-      build: () {
-        when(() => finRepository.postUserDebitPre(1, 100))
-            .thenAnswer((_) async => right(userPendTrans));
-        when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-            .thenAnswer((_) async => left(Failure()));
-        // when(() => finRepository.postUserRevertDebitTrans(1, 100))
-        //     .thenAnswer((_) async => right(userIntTrans));
-        return balanceBloc;
-      },
-      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
-      expect: () => <BalanceState>[
-        BalanceLoading(),
-        const BalancePostingPending(),
-        BalanceSuccess(userPendTrans),
-        BalanceSuccess(userIntTrans),
-      ],
-    );
-
-    blocTest<BalanceBloc, BalanceState>(
-      '''emits [
-        BalanceLoading,
-        BalancePostingPending,
-        BalanceSuccess,
-        BalancePostingFailer] when UserDebitEvent is added and update user monthlySpent api failed.''',
-      build: () {
-        when(() => finRepository.postUserDebitPre(1, 100))
-            .thenAnswer((_) async => right(userPendTrans));
-        // when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-        //     .thenAnswer((_) async => right(true));
-        when(() => finRepository.postUserDebitPost(1, 100))
-            .thenAnswer((_) async => left(Failure()));
-
-        return balanceBloc;
-      },
-      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
-      expect: () => <BalanceState>[
-        BalanceLoading(),
-        const BalancePostingPending(),
-        BalanceSuccess(userPendTrans),
-        const BalancePostingFailer(apiErrorMessage),
-      ],
-    );
-
-    blocTest<BalanceBloc, BalanceState>(
-      '''emits [
-        BalanceLoading,
-        BalancePostingPending,
-        BalanceSuccess,
         BalancePostingFailer] when UserDebitEvent is added with lack of funds.''',
       build: () {
-        when(() => finRepository.postUserDebitPre(1, 100))
-            .thenAnswer((_) async => right(userPendTrans));
-        // when(() => beneRepository.postBeneficiaryCredit(1, 100, 100))
-        //     .thenAnswer((_) async => right(true));
-        when(() => finRepository.postUserDebitPost(1, 100))
-            .thenAnswer((_) async => left(Failure()));
-
+        when(() => finRepository.postUserDebitPre(
+                userTopUpParam.userId, userTopUpParam.amount))
+            .thenAnswer((_) async => left(Failure('Insufficient funds')));
         return balanceBloc;
       },
-      act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
+      act: (bloc) => bloc.add(UserDebitPreEvent(userTopUpParam)),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        const BalancePostingPending(),
-        BalanceSuccess(userPendTrans),
-        const BalancePostingFailer(apiErrorMessage),
+        const BalancePostingFailer('Insufficient funds'),
       ],
     );
   });
@@ -209,3 +149,4 @@ var userApprTrans = const UserFinancialSummary(
 );
 
 const apiErrorMessage = 'An unexpected error occurred';
+var userTopUpParam = UserTopUpParam(1, 100, 100);

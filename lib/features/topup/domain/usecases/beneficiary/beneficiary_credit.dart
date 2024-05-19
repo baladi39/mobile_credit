@@ -18,20 +18,5 @@ class BeneficiaryCredit implements UseCase<List<Beneficiary>, UserTopUpParam> {
       userTopUpParam.beneficiaryId,
       userTopUpParam.amount,
     );
-
-    // /// This logic ussually should be done in the Backend but demostration purposes I did it here
-    // return response.fold((_) async {
-    //   // Revert changes
-    //   return await financialRepository.postUserRevertDebitTrans(
-    //     userTopUpParam.userId,
-    //     userTopUpParam.amount,
-    //   );
-    // }, (_) async {
-    //   // Proceed as normal
-    //   return await financialRepository.postUserDebitTrans(
-    //     userTopUpParam.userId,
-    //     userTopUpParam.amount,
-    //   );
-    // });
   }
 }
