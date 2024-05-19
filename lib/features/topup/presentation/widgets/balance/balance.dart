@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 import 'package:mobile_credit/core/utils/extensions/double_extensions.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
 import 'package:mobile_credit/core/utils/show_snackbar.dart';
@@ -86,7 +85,7 @@ class _BalanceState extends State<Balance> {
       showSnackBar(context, 'Transaction Pending wait 8 secs');
       context
           .read<BeneficiaryBloc>()
-          .add(CreditBeneficiariesEvent(UserTopUpParam(1, 100, 100)));
+          .add(CreditBeneficiariesEvent(state.userTopUpParam));
     }
     if (state is BalanceFailer) {
       showSnackBar(context, state.meesage);

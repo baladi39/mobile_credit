@@ -4,18 +4,14 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 import 'package:mobile_credit/core/error/failures.dart';
 import 'package:mobile_credit/features/topup/domain/entities/user_financial_summary.dart';
-
 import 'package:mobile_credit/features/topup/domain/repository/beneficiary_repository.dart';
 import 'package:mobile_credit/features/topup/domain/repository/financial_repository.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/add_beneficiary.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/beneficiary_credit.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/latest_beneficiaries.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/latest_financial_summary.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/user_debit_post.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/user_debit_pre.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/user_debit_revert.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/financial/latest_financial_summary.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/financial/user_debit_post.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/financial/user_debit_pre.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/financial/user_debit_revert.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
-import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/bloc/beneficiary_bloc.dart';
+
 import 'package:mocktail/mocktail.dart';
 
 class MockBeneRepository extends Mock implements BeneficiaryRepository {}
@@ -26,28 +22,18 @@ void main() {
   late MockBeneRepository beneRepository;
   late MockFinRepository finRepository;
   late BalanceBloc balanceBloc;
-  late BeneficiaryBloc beneficiaryBloc;
 
   setUp(() {
     beneRepository = MockBeneRepository();
     finRepository = MockFinRepository();
     var latestFinancialSummary = LatestFinancialSummary(finRepository);
     var userDebitPre = UserDebitPre(finRepository);
-    var beneficiaryCredit = BeneficiaryCredit(beneRepository);
-    var latestBeneficiaries = LatestBeneficiaries(beneRepository);
     var userDebitPost = UserDebitPost(finRepository);
     var userDebitRevert = UserDebitRevert(finRepository);
-    var addBeneficiary = AddBeneficiary(beneRepository);
-
-    beneficiaryBloc = BeneficiaryBloc(
-        latestBeneficiaries: latestBeneficiaries,
-        addBeneficiary: addBeneficiary,
-        beneficiaryCredit: beneficiaryCredit);
 
     balanceBloc = BalanceBloc(
       latestFinancialSummary: latestFinancialSummary,
       userDebitPre: userDebitPre,
-      beneficiaryBloc: beneficiaryBloc,
       userDebitPost: userDebitPost,
       userDebitRevert: userDebitRevert,
     );
@@ -104,7 +90,7 @@ void main() {
       act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        BalancePostingPending(),
+        const BalancePostingPending(),
         BalanceSuccess(userPendTrans),
         BalanceSuccess(userApprTrans),
       ],
@@ -146,7 +132,7 @@ void main() {
       act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        BalancePostingPending(),
+        const BalancePostingPending(),
         BalanceSuccess(userPendTrans),
         BalanceSuccess(userIntTrans),
       ],
@@ -171,7 +157,7 @@ void main() {
       act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        BalancePostingPending(),
+        const BalancePostingPending(),
         BalanceSuccess(userPendTrans),
         const BalancePostingFailer(apiErrorMessage),
       ],
@@ -196,7 +182,7 @@ void main() {
       act: (bloc) => bloc.add(UserDebitPreEvent(UserTopUpParam(1, 100, 100))),
       expect: () => <BalanceState>[
         BalanceLoading(),
-        BalancePostingPending(),
+        const BalancePostingPending(),
         BalanceSuccess(userPendTrans),
         const BalancePostingFailer(apiErrorMessage),
       ],

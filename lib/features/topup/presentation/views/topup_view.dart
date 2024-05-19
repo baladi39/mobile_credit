@@ -38,7 +38,6 @@ class _TopupViewState extends State<TopupView> {
                 userDebitPre: serviceLocator(),
                 userDebitPost: serviceLocator(),
                 userDebitRevert: serviceLocator(),
-                beneficiaryBloc: BlocProvider.of<BeneficiaryBloc>(context),
               ),
             ),
           ],

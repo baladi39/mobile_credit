@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
-import 'package:mobile_credit/features/topup/domain/usecases/add_beneficiary.dart';
+import 'package:mobile_credit/features/topup/domain/usecases/beneficiary/add_beneficiary.dart';
 
 import 'bloc/beneficiary_bloc.dart';
 

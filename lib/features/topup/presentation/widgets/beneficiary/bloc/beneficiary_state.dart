@@ -16,12 +16,18 @@ final class BeneficiarySuccess extends BeneficiaryState {
   const BeneficiarySuccess(this.beneficiaries);
 }
 
-final class BeneficiaryCreditSuccess extends BeneficiaryState {
-  final List<Beneficiary> beneficiaries;
-  const BeneficiaryCreditSuccess(this.beneficiaries);
-}
-
 final class BeneficiaryFailer extends BeneficiaryState {
   final String message;
   const BeneficiaryFailer(this.message);
+}
+
+final class BeneficiaryCreditSuccess extends BeneficiaryState {
+  final UserTopUpParam userTopUpParam;
+  const BeneficiaryCreditSuccess(this.userTopUpParam);
+}
+
+final class BeneficiaryCreditFailer extends BeneficiaryState {
+  final String message;
+  final UserTopUpParam userTopUpParam;
+  const BeneficiaryCreditFailer(this.message, this.userTopUpParam);
 }

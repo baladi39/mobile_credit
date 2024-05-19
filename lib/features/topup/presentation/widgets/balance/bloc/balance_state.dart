@@ -32,7 +32,10 @@ final class BalanceFailer extends BalanceState {
   const BalanceFailer(this.meesage);
 }
 
-final class BalancePostingPending extends BalanceState {}
+final class BalancePostingPending extends BalanceState {
+  final UserTopUpParam userTopUpParam;
+  const BalancePostingPending(this.userTopUpParam);
+}
 
 final class BalancePostingFailer extends BalanceState {
   final String meesage;
