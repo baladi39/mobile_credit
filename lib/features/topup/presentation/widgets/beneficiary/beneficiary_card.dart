@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class BeneficiaryCard extends StatelessWidget {
   final String nickName;
@@ -26,9 +27,12 @@ class BeneficiaryCard extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                Text(
-                  nickName,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                Expanded(
+                  child: Text(
+                    nickName,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Text(
                   phoneNumber,

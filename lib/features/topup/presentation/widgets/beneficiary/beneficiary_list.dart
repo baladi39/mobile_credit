@@ -56,7 +56,7 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
                 headerAndAddButton(context, state),
                 SizedBox(height: context.height * 24.h),
                 SizedBox(
-                  height: context.height * 135.h,
+                  height: context.height * 130.h,
                   child: beneficiaryList(state),
                 ),
               ],
@@ -117,8 +117,9 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
                         child: const AddBeneficiaryDialog(),
                       );
                     });
+              } else {
+                showSnackBar(context, 'Beneficiary limit reached');
               }
-              showSnackBar(context, 'Beneficiary limit reached');
             },
           )
       ],
