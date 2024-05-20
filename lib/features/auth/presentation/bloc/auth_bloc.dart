@@ -22,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLoginEvent event,
     Emitter<AuthState> emit,
   ) async {
-    var response = await currentUser(event.isVerified);
+    var response = await currentUser(event.userId);
 
     response.fold(
       (l) => emit(AuthFailure(l.toString())),

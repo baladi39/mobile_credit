@@ -14,9 +14,9 @@ class AuthRepositoryImpl implements AuthRepository {
   );
 
   @override
-  Future<Either<Failure, User>> currentUser(bool isVerifed) async {
+  Future<Either<Failure, User>> currentUser(int userId) async {
     try {
-      final user = await remoteDataSource.getCurrentUserData(isVerifed);
+      final user = await remoteDataSource.getCurrentUserData(userId);
       if (user == null) {
         return left(Failure('User not logged in!'));
       }

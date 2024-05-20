@@ -1,35 +1,26 @@
 import 'package:mobile_credit/core/error/exceptions.dart';
+import 'package:mobile_credit/fake_datebase.dart';
 import 'package:mobile_credit/features/auth/data/models/user_model.dart';
 
 abstract interface class AuthRemoteDataSource {
-  Future<UserModel?> getCurrentUserData(bool isUserVerified);
+  Future<UserModel?> getCurrentUserData(int userId);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  AuthRemoteDataSourceImpl();
+  /// Usually I would use the fakedatabase for testing ONLY but I am including here for demostration
+  /// So I created fake database which is implemented to a test database
+  AuthRemoteDataSourceImpl(this.fakeDatebase);
+
+  final FakeDatebase fakeDatebase;
 
   @override
-  Future<UserModel?> getCurrentUserData(bool? isUserVerified) async {
+  Future<UserModel?> getCurrentUserData(int userId) async {
     try {
-      /// Pretend we are recieving json and we passed it to userModel.fromJson()
-      if (isUserVerified == null) {
-        return null;
-      }
-      if (isUserVerified) {
-        return UserModel(
-            id: 1,
-            email: 'sally@yopmail.com',
-            name: 'Sally Myers',
-            isVerifed: true);
-      } else {
-        return UserModel(
-            id: 2,
-            email: 'carla@yopmail.com',
-            name: 'Carla Cruz',
-            isVerifed: false);
-      }
+      var user = fakeDatebase.users.where((a) => a['user_id'] == userId).first;
+      UserModel.fromJson(user);
     } catch (e) {
       throw ServerException(e.toString());
     }
+    return null;
   }
 }

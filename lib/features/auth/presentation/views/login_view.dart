@@ -46,14 +46,14 @@ class LoginView extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => context
                         .read<AuthBloc>()
-                        .add(const AuthLoginEvent(isVerified: true)),
+                        .add(const AuthLoginEvent(userId: 1)),
                     child: const Text('Verified User'),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => context
                         .read<AuthBloc>()
-                        .add(const AuthLoginEvent(isVerified: false)),
+                        .add(const AuthLoginEvent(userId: 2)),
                     child: const Text('Un-Verified User'),
                   ),
                 ],

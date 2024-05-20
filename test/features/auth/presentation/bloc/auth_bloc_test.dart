@@ -29,6 +29,8 @@ void main() {
   });
 
   group('onAuthLogin', () {
+    var userIdExist = 1;
+    var userIdFake = 100;
     final userTest = User(
       id: 1,
       email: 'test@yopmail.com',
@@ -39,22 +41,22 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'emits [AuthLoading, AuthSuccess] when AuthLoginEvent is added with verified user.',
       build: () {
-        when(() => mockAuthRepository.currentUser(true))
+        when(() => mockAuthRepository.currentUser(userIdExist))
             .thenAnswer((_) async => right(userTest));
         return authBloc;
       },
-      act: (bloc) async => bloc.add(const AuthLoginEvent(isVerified: true)),
+      act: (bloc) async => bloc.add(AuthLoginEvent(userId: userIdExist)),
       expect: () => <AuthState>[AuthLoading(), AuthSuccess(userTest)],
     );
 
     blocTest<AuthBloc, AuthState>(
       'emits [AuthLoading, AuthFailure] when AuthLoginEvent is added failed authentication',
       build: () {
-        when(() => mockAuthRepository.currentUser(true))
+        when(() => mockAuthRepository.currentUser(userIdFake))
             .thenAnswer((_) async => left(Failure()));
         return authBloc;
       },
-      act: (bloc) async => bloc.add(const AuthLoginEvent(isVerified: true)),
+      act: (bloc) async => bloc.add(AuthLoginEvent(userId: userIdFake)),
       expect: () => <AuthState>[
         AuthLoading(),
         const AuthFailure('An unexpected error occurred')

@@ -8,10 +8,10 @@ sealed class AuthEvent extends Equatable {
 }
 
 final class AuthLoginEvent extends AuthEvent {
-  final bool isVerified;
+  final int userId;
 
   const AuthLoginEvent({
-    required this.isVerified,
+    required this.userId,
   });
 }
 

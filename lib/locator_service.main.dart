@@ -22,7 +22,7 @@ void _initAuth() {
   // Datasource
   serviceLocator
     ..registerFactory<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(),
+      () => AuthRemoteDataSourceImpl(serviceLocator()),
     )
     // Repository
     ..registerFactory<AuthRepository>(
