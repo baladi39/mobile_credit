@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
+import 'package:mobile_credit/core/utils/extensions/screen_extensions.dart';
 import 'package:mobile_credit/core/utils/show_snackbar.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/add_beneficiary_dialog.dart';
@@ -32,7 +33,8 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 40, bottom: 16),
+        padding: EdgeInsets.only(
+            top: context.height * 40.h, bottom: context.height * 16.h),
         child: BlocConsumer<BeneficiaryBloc, BeneficiaryState>(
           listener: (context, state) {
             if (state is BeneficiaryCreditFailer) {
@@ -52,8 +54,11 @@ class _BeneficiaryListState extends State<BeneficiaryList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 headerAndAddButton(context, state),
-                const SizedBox(height: 24),
-                SizedBox(height: 135, child: beneficiaryList(state)),
+                SizedBox(height: context.height * 24.h),
+                SizedBox(
+                  height: context.height * 135.h,
+                  child: beneficiaryList(state),
+                ),
               ],
             );
           },

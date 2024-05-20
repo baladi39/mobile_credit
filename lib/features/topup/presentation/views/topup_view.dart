@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_credit/core/utils/extensions/screen_extensions.dart';
 import 'package:mobile_credit/features/auth/presentation/views/login_view.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/beneficiary/beneficiary_list.dart';
@@ -41,9 +42,11 @@ class _TopupViewState extends State<TopupView> {
               ),
             ),
           ],
-          child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Column(
+          child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: context.height * 16.h,
+                  horizontal: context.width * 16.w),
+              child: const Column(
                 children: [
                   // User Header
                   UserHeader(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_credit/core/utils/extensions/screen_extensions.dart';
 import 'package:mobile_credit/core/utils/extensions/double_extensions.dart';
 import 'package:mobile_credit/core/common/widgets/loader.dart';
 import 'package:mobile_credit/core/utils/show_snackbar.dart';
@@ -29,7 +30,7 @@ class _BalanceState extends State<Balance> {
   Widget build(BuildContext context) {
     var appUserLoggedIn = context.read<AppUserCubit>().state as AppUserLoggedIn;
     return Padding(
-        padding: const EdgeInsets.only(top: 16),
+        padding: EdgeInsets.only(top: context.height * 16.h),
         child: BlocConsumer<BalanceBloc, BalanceState>(
           listener: (context, state) {
             notificationListners(state, context, appUserLoggedIn);

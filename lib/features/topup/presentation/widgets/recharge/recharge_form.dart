@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:mobile_credit/core/common/parameters/user_topup_param.dart';
 import 'package:mobile_credit/core/constants/constants.dart';
+import 'package:mobile_credit/core/utils/extensions/screen_extensions.dart';
 import 'package:mobile_credit/core/utils/extensions/double_extensions.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/balance/bloc/balance_bloc.dart';
 import 'package:mobile_credit/features/topup/presentation/widgets/recharge/cubit/recharge_cubit.dart';
@@ -34,7 +35,7 @@ class _RechargeFormState extends State<RechargeForm> {
     return BlocBuilder<RechargeCubit, RechargeState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.only(top: 24),
+          padding: EdgeInsets.only(top: context.height * 24.h),
           child: Column(
             children: [
               Row(
@@ -44,9 +45,9 @@ class _RechargeFormState extends State<RechargeForm> {
                   Text(widget.balance.amountToString()),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: context.height * 24.h),
               topUpDropdown(state, context),
-              const SizedBox(height: 36),
+              SizedBox(height: context.height * 36.h),
               saveButton(context, state)
             ],
           ),

@@ -13,4 +13,8 @@ class Constants {
   static const monthlySpendLimit = 3000.0;
   static const beneficiarySpendLimitVerified = 500.0;
   static const beneficiarySpendLimitUnVerified = 1000.0;
+
+  // Average mobile screen size
+  static const maxWidth = 360;
+  static const maxLenght = 800;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_credit/core/utils/extensions/screen_extensions.dart';
 
 class DialogHeader extends StatelessWidget {
   final String title;
@@ -16,12 +17,12 @@ class DialogHeader extends StatelessWidget {
         const Spacer(),
         InkWell(
           onTap: () => Navigator.of(context).pop(),
-          child: const Padding(
-            padding: EdgeInsets.only(top: 3),
+          child: Padding(
+            padding: EdgeInsets.only(top: context.height * 3.h),
             child: Icon(
               Icons.close_rounded,
               color: Colors.black,
-              size: 24,
+              size: context.height * 24.h,
             ),
           ),
         ),

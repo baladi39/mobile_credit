@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/locator_services.dart';
 
@@ -8,6 +9,11 @@ import 'features/auth/presentation/views/login_view.dart';
 
 void main() async {
   await locatorServices();
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(multiBlocProvider);
 }
 

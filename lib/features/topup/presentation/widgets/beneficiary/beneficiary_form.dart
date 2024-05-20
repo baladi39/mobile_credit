@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_credit/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:mobile_credit/core/utils/extensions/screen_extensions.dart';
 import 'package:mobile_credit/features/topup/domain/usecases/beneficiary/add_beneficiary.dart';
 
 import 'bloc/beneficiary_bloc.dart';
@@ -30,7 +31,7 @@ class _BeneficiaryFormState extends State<BeneficiaryForm> {
     final beneficiaryFormKey = GlobalKey<FormState>();
     final controller = TextEditingController();
     return Padding(
-      padding: const EdgeInsets.only(top: 24),
+      padding: EdgeInsets.only(top: context.height * 24.h),
       child: Form(
         key: beneficiaryFormKey,
         child: Column(
@@ -54,7 +55,7 @@ class _BeneficiaryFormState extends State<BeneficiaryForm> {
                 return null;
               },
             ),
-            const SizedBox(height: 36),
+            SizedBox(height: context.height * 36.h),
             ElevatedButton(
               onPressed: () {
                 log(appUserLoggedIn.user.id.toString());
