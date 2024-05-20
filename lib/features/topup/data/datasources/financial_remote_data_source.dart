@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:mobile_credit/core/constants/constants.dart';
 import 'package:mobile_credit/core/error/exceptions.dart';
 import 'package:mobile_credit/fake_datebase.dart';
@@ -54,12 +56,13 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
       double totalBalance = userFin['financial_summary']['total_balance'];
       double totalMonthlySpent =
           userFin['financial_summary']['total_monthly_spent'];
+      log('Spank me baby');
 
       if (totalBalance < (amount + Constants.transactionFee)) {
         throw const ServerException('Insufficient funds');
       }
 
-      if (Constants.monthlySpendLimit > (amount + totalMonthlySpent)) {
+      if (Constants.monthlySpendLimit < (amount + totalMonthlySpent)) {
         throw const ServerException('User monthly limit reached');
       }
 

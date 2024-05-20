@@ -27,14 +27,14 @@ class TestDatebase implements FakeDatebase {
     {
       'user_id': 5,
       'financial_summary': {
-        'total_balance': 100,
+        'total_balance': 100.0,
         'total_monthly_spent': 390.00
       },
     },
     {
       'user_id': 6,
       'financial_summary': {
-        'total_balance': 100,
+        'total_balance': 100.0,
         'total_monthly_spent': 2990.00
       },
     },

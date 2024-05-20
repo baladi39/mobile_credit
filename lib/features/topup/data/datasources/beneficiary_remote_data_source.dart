@@ -76,8 +76,8 @@ class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
   Future<List<BeneficiaryModel>> postBeneficiaryCredit(
       int userId, int beneficiaryId, double amount) async {
     //// Change if you do not wait 8 seconds for every test
-    //await Future.delayed(const Duration(seconds: 8));
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 8));
+    // await Future.delayed(const Duration(seconds: 1));
     try {
       List<BeneficiaryModel> beneficiaries = [];
 
