@@ -14,6 +14,8 @@ abstract interface class BeneficiaryRemoteDataSource {
       int userId, int beneficiaryId, double amount);
 }
 
+/// By placing the validation logic on the backend, we can make adjustments to the validation rules without requiring users to download a new app version.
+/// This improves user experience as updates happen seamlessly in the background
 class BeneficiaryRemoteDataSourceImpl implements BeneficiaryRemoteDataSource {
   final FakeDatebase fakeDatebase;
   BeneficiaryRemoteDataSourceImpl(

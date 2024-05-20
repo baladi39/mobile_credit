@@ -15,6 +15,8 @@ abstract interface class FinancialRemoteDataSource {
       int userId, double amount);
 }
 
+/// By placing the validation logic on the backend, we can make adjustments to the validation rules without requiring users to download a new app version.
+/// This improves user experience as updates happen seamlessly in the background
 class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
   FinancialRemoteDataSourceImpl(
     /// Usually I would use the fakedatabase for testing ONLY but I am including here for demostration
@@ -56,7 +58,6 @@ class FinancialRemoteDataSourceImpl implements FinancialRemoteDataSource {
       double totalBalance = userFin['financial_summary']['total_balance'];
       double totalMonthlySpent =
           userFin['financial_summary']['total_monthly_spent'];
-      log('Spank me baby');
 
       if (totalBalance < (amount + Constants.transactionFee)) {
         throw const ServerException('Insufficient funds');
