@@ -43,7 +43,10 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
     on<UserDebitPreEvent>((event, emit) async {
       var response = await userDebitPre(event.userTopUpParam);
       response.fold(
-        (l) => emit(BalancePostingFailer(l.message)),
+        (l) {
+          add(GetBalanceEvent(event.userTopUpParam.userId));
+          emit(BalancePostingFailer(l.message));
+        },
         (r) {
           emit(BalancePostingPending(event.userTopUpParam));
           emit(BalanceSuccess(r));
@@ -55,7 +58,10 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
     on<UserDebitPostEvent>((event, emit) async {
       var response = await userDebitPost(event.userTopUpParam);
       response.fold(
-        (l) => emit(BalancePostingFailer(l.message)),
+        (l) {
+          add(GetBalanceEvent(event.userTopUpParam.userId));
+          emit(BalancePostingFailer(l.message));
+        },
         (r) => emit(BalanceSuccess(r)),
       );
     });
@@ -64,7 +70,10 @@ class BalanceBloc extends Bloc<BalanceEvent, BalanceState> {
     on<UserDebitRevertEvent>((event, emit) async {
       var response = await userDebitRevert(event.userTopUpParam);
       response.fold(
-        (l) => emit(BalancePostingFailer(l.message)),
+        (l) {
+          add(GetBalanceEvent(event.userTopUpParam.userId));
+          emit(BalancePostingFailer(l.message));
+        },
         (r) => emit(BalanceSuccess(r)),
       );
     });

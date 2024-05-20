@@ -14,13 +14,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FakeDatebase fakeDatebase;
 
   @override
-  Future<UserModel?> getCurrentUserData(int userId) async {
+  Future<UserModel> getCurrentUserData(int userId) async {
     try {
       var user = fakeDatebase.users.where((a) => a['user_id'] == userId).first;
-      UserModel.fromJson(user);
+      return UserModel.fromJson(user);
     } catch (e) {
       throw ServerException(e.toString());
     }
-    return null;
   }
 }

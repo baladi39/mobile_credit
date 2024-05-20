@@ -31,7 +31,7 @@ void main() {
   group('onAuthLogin', () {
     var userIdExist = 1;
     var userIdFake = 100;
-    final userTest = User(
+    const userTest = User(
       id: 1,
       email: 'test@yopmail.com',
       name: 'Mr Test',
@@ -46,7 +46,7 @@ void main() {
         return authBloc;
       },
       act: (bloc) async => bloc.add(AuthLoginEvent(userId: userIdExist)),
-      expect: () => <AuthState>[AuthLoading(), AuthSuccess(userTest)],
+      expect: () => <AuthState>[AuthLoading(), const AuthSuccess(userTest)],
     );
 
     blocTest<AuthBloc, AuthState>(

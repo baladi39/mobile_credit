@@ -90,5 +90,8 @@ class _BalanceState extends State<Balance> {
     if (state is BalanceFailer) {
       showSnackBar(context, state.meesage);
     }
+    if (state is BalancePostingFailer) {
+      showSnackBar(context, state.meesage);
+    }
   }
 }

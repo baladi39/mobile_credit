@@ -5,7 +5,7 @@ import 'package:mobile_credit/core/common/entities/user.dart';
 
 void main() {
   group('updateUser()', () {
-    var userTest = User(
+    var userTest = const User(
       id: 1,
       email: 'test@yopmail.com',
       name: 'Mr Test',

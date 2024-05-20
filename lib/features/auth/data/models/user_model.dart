@@ -1,7 +1,7 @@
 import 'package:mobile_credit/core/common/entities/user.dart';
 
 class UserModel extends User {
-  UserModel({
+  const UserModel({
     required super.id,
     required super.email,
     required super.name,
@@ -11,7 +11,7 @@ class UserModel extends User {
   // Methods for converting to and from JSON format, currently not used due to mocked responses.
   factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] ?? '',
+      id: map['user_id'] ?? '',
       email: map['email'] ?? '',
       name: map['name'] ?? '',
       isVerifed: map['is_verifed'] ?? '',
